@@ -2,9 +2,11 @@ class Game
   attr_reader :board
   def initialize
     @pieces = make_pieces()
-    @board = Board.new
+    @board = Board.new(@pieces)
   end
 
+  private
+  
   def make_pieces
     pieces = []
   
