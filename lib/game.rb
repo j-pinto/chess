@@ -1,12 +1,13 @@
 class Game
   attr_reader :board
   def initialize
+    @players = make_players()
     @pieces = make_pieces()
     @board = Board.new(@pieces)
   end
 
   private
-  
+
   def make_pieces
     pieces = []
   
@@ -46,5 +47,14 @@ class Game
     }
     
     return pieces
+  end
+
+  def make_players
+    players = {
+      'white' => Player.new('white')
+      'black' => Player.new('black')
+    }
+
+    return players
   end
 end
