@@ -51,10 +51,12 @@ class Game
 
   def make_players
     players = {
-      'white' => Player.new('white')
+      'white' => Player.new('white'),
       'black' => Player.new('black')
     }
 
     return players
   end
+  
+#
 end
