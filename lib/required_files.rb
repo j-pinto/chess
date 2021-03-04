@@ -1,6 +1,7 @@
 require 'colorize'
 
 require_relative 'board'
+require_relative 'game'
 require_relative 'graphics'
 require_relative 'piece'
 require_relative 'piece_constants'

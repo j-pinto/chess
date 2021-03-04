@@ -1,6 +1,6 @@
 class King < Piece
   attr_accessor :in_check
-  def initialize
+  def initialize(color, default_position=nil)
     super
     @in_check = false
   end
@@ -9,7 +9,7 @@ end
 class Pawn < Piece
   attr_reader :capture_moveset
   attr_accessor :en_pass_vulnerable
-  def initialize
+  def initialize(color, default_position=nil)
     super
     @en_pass_vulnerable = false
     @capture_moveset = get_pawn_capture_moveset(self)
@@ -27,25 +27,25 @@ class Pawn < Piece
 end
 
 class Rook < Piece
-  def initialize
+  def initialize(color, default_position=nil)
     super
   end
 end
 
 class Bishop < Piece
-  def initialize
+  def initialize(color, default_position=nil)
     super
   end
 end
 
 class Queen < Piece
-  def initialize
+  def initialize(color, default_position=nil)
     super
   end
 end
 
 class Knight < Piece
-  def initialize
+  def initialize(color, default_position=nil)
     super
   end
 end

@@ -4,7 +4,6 @@ class Board
   def initialize
     @grid = {}
     make()
-    print()
   end
 
   def make()
@@ -13,6 +12,5 @@ class Board
 
     full_array.each { |item| @grid[item] = nil }
   end
-
 #
 end
