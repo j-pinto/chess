@@ -7,6 +7,57 @@ class Board
     make()
   end
 
+  public
+
+  def in_bounds?(square)
+    if ( square[0].between?(0, 7) && square[1].between?(0, 7) )
+      return true
+    else
+      return false
+    end
+  end
+
+  def empty?(square)
+    if @grid[square] == nil
+      return true
+    else
+      return false
+    end
+  end
+
+  def get_piece(square)
+    if empty?(square)
+      return nil
+    else
+      piece = @grid[square]
+      return piece
+    end
+  end
+
+  def friendly_occupied?(square, current_player)
+    if empty?(square)
+      return false
+    end
+    occupying_piece = get_piece(square)
+    if occupying_piece.color != current_player.color
+      return false
+    end 
+    #puts "#{square} friendly occupied"
+    return true
+  end
+
+  def enemy_occupied?(square, current_player)
+    if empty?(square)
+      return false 
+    end
+    occupying_piece = get_piece(square)
+    if occupying_piece.color == current_player.color
+      return false 
+    end
+    #puts "#{square} enemy occupied"
+    return true
+  end
+
   private
 
   def make
