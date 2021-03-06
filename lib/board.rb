@@ -34,19 +34,19 @@ class Board
     end
   end
 
-  def friendly_occupied?(square, current_player)
+  def friendly_occupied?(square, friendly_color)
     if empty?(square)
       return false
     end
     occupying_piece = get_piece(square)
-    if occupying_piece.color != current_player.color
+    if occupying_piece.color != friendly_color.color
       return false
     end 
     #puts "#{square} friendly occupied"
     return true
   end
 
-  def enemy_occupied?(square, current_player)
+  def enemy_occupied?(square, friendly_color)
     if empty?(square)
       return false 
     end
