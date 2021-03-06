@@ -20,7 +20,7 @@ class Board
 
   def populate
     @pieces.each do |piece|
-      location = piece.default_position
+      location = piece.location
       @grid[location] = piece
     end
   end

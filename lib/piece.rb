@@ -1,11 +1,11 @@
 class Piece
-  attr_reader :default_position, :color, :moveset, :unicode
+  attr_reader :location, :color, :moveset, :unicode
   attr_accessor :has_moved
 
-  def initialize(color, default_position=nil)
+  def initialize(color, initial_location)
     @color = color
     @has_moved = false
-    @default_position = default_position
+    @location = initial_location
     @moveset = get_moveset(self)
     @unicode = add_unicode(self)
   end
