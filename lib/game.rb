@@ -1,9 +1,12 @@
 class Game
-  attr_reader :board
+  attr_accessor :turn_count
+  attr_reader :board, :players
   def initialize
     @players = make_players()
     @pieces = make_pieces()
     @board = Board.new(@pieces)
+
+    @turn_count = 0
   end
 
   private

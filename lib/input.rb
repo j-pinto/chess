@@ -3,6 +3,8 @@ class Input
   def initialize
     @start = nil
     @finish = nil
+
+    get()
   end
   
   def get()
