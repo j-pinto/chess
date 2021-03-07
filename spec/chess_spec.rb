@@ -95,6 +95,72 @@ describe King do
       expect(expected_array & actual_array).to eql(expected_array)
     end
   end
+
+  describe '#castle_short_available?' do
+    it "Returns true if king and kingside rook have not moved and squares between are empty" do
+      #create new board, then wipe all pieces
+      board = Board.new
+      board.grid.each_pair { |square, piece| board.grid[square] = nil }
+
+      #create new pieces at specific locations for tests
+      white_king = King.new('white', [4,0])
+      board.grid[[4,0]] = white_king
+      white_rook = Rook.new('white', [7,0])
+      board.grid[[7,0]] = white_rook
+
+      black_king = King.new('black', [4,7])
+      board.grid[[4,7]] = black_king
+      black_rook = Rook.new('black', [7,7])
+      board.grid[[7,7]] = black_rook
+
+      expect(white_king.castle_short_available?(board)).to eql(true)
+      expect(black_king.castle_short_available?(board)).to eql(true)
+
+      blocking_piece = Pawn.new('white', [5,0])
+      board.grid[[5,0]] = blocking_piece
+      expect(white_king.castle_short_available?(board)).to eql(false)
+
+      board.grid[[5,0]] = nil
+      board.grid[[7,0]] = Knight.new('white', [7,0])
+      expect(white_king.castle_short_available?(board)).to eql(false)
+
+      black_king.has_moved = true
+      expect(black_king.castle_short_available?(board)).to eql(false)
+    end
+  end
+
+  describe '#castle_long_available?' do
+    it "Returns true if king and queenside rook have not moved and squares between are empty" do
+      #create new board, then wipe all pieces
+      board = Board.new
+      board.grid.each_pair { |square, piece| board.grid[square] = nil }
+
+      #create new pieces at specific locations for tests
+      white_king = King.new('white', [4,0])
+      board.grid[[4,0]] = white_king
+      white_rook = Rook.new('white', [0,0])
+      board.grid[[0,0]] = white_rook
+
+      black_king = King.new('black', [4,7])
+      board.grid[[4,7]] = black_king
+      black_rook = Rook.new('black', [0,7])
+      board.grid[[0,7]] = black_rook
+
+      expect(white_king.castle_long_available?(board)).to eql(true)
+      expect(black_king.castle_long_available?(board)).to eql(true)
+
+      blocking_piece = Pawn.new('white', [1,0])
+      board.grid[[1,0]] = blocking_piece
+      expect(white_king.castle_long_available?(board)).to eql(false)
+
+      board.grid[[1,0]] = nil
+      board.grid[[0,0]] = Knight.new('white', [7,0])
+      expect(white_king.castle_long_available?(board)).to eql(false)
+
+      black_king.has_moved = true
+      expect(black_king.castle_long_available?(board)).to eql(false)
+    end
+  end
 end
 
 describe Knight do
