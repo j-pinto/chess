@@ -117,5 +117,24 @@ describe Knight do
   end
 end
 
+describe Pawn do
+  describe '#update_reachable_locations' do
+    it "returns two steps ahead of pawn if pawn has not been moved" do
+      board = Board.new
+      pawn = board.grid[[0,1]]
+      pawn.has_moved = false
+      expect(pawn.update_reachable_locations(board)).to eql([ [0,2], [0,3] ])
+    end
+  end
+
+  describe '#update_reachable_locations' do
+    it "returns one step ahead of pawn if pawn has been moved" do
+      board = Board.new
+      pawn = board.grid[[0,1]]
+      pawn.has_moved = true
+      expect(pawn.update_reachable_locations(board)).to eql([ [0,2] ])
+    end
+  end
+end
 
 
