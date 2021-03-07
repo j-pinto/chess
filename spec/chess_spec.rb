@@ -135,6 +135,41 @@ describe Pawn do
       expect(pawn.update_reachable_locations(board)).to eql([ [0,2] ])
     end
   end
+
+  describe '#update_reachable_captures' do
+    it "returns array of squares reachable by the pawn that result in capture" do
+      board = Board.new
+      board.grid.each_pair { |square, piece| board.grid[square] = nil }
+
+      white_pawn = Pawn.new('white', [0,5])
+      board.grid[[0,5]] = white_pawn
+      black_pawn = Pawn.new('black', [1,6])
+      board.grid[[1,6]] = black_pawn
+
+      expect(white_pawn.update_reachable_captures(board)).to eql( [ [1,6] ] )
+      expect(black_pawn.update_reachable_captures(board)).to eql( [ [0,5] ] )
+    end
+  end
+
+  describe '#update_reachable_captures' do
+    it "returns array of squares reachable by the pawn that result in en passant" do
+      board = Board.new
+      board.grid.each_pair { |square, piece| board.grid[square] = nil }
+
+      white_pawn = Pawn.new('white', [1,4])
+      board.grid[[1,4]] = white_pawn
+
+      target_pawn = Pawn.new('black', [0,4])
+      target_pawn.en_pass_vulnerable = true
+      board.grid[[0,4]] = target_pawn
+
+      fake_target_pawn = Pawn.new('black', [2,4])
+      fake_target_pawn.en_pass_vulnerable = false
+      board.grid[[2,4]] = fake_target_pawn
+
+      expect(white_pawn.update_reachable_captures(board)).to eql( [ [0,5] ] )
+    end
+  end
 end
 
 
