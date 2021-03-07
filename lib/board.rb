@@ -1,10 +1,10 @@
 class Board
   attr_accessor :grid
 
-  def initialize(pieces)
-    @pieces = pieces
-    @grid = {}
-    make()
+  def initialize
+    @pieces = make_pieces()
+    @grid = make_grid()
+    populate()
   end
 
   public
@@ -39,10 +39,9 @@ class Board
       return false
     end
     occupying_piece = get_piece(square)
-    if occupying_piece.color != friendly_color.color
+    if occupying_piece.color != friendly_color
       return false
     end 
-    #puts "#{square} friendly occupied"
     return true
   end
 
@@ -51,29 +50,70 @@ class Board
       return false 
     end
     occupying_piece = get_piece(square)
-    if occupying_piece.color == current_player.color
+    if occupying_piece.color == friendly_color
       return false 
     end
-    #puts "#{square} enemy occupied"
     return true
   end
 
   private
-
-  def make
-    half_array = (0..7).to_a
-    full_array = half_array.repeated_permutation(2).to_a
-
-    full_array.each { |location| @grid[location] = nil }
-
-    populate()
-  end
 
   def populate
     @pieces.each do |piece|
       location = piece.location
       @grid[location] = piece
     end
+  end
+
+  def make_grid
+    grid = {}
+    half_array = (0..7).to_a
+    full_array = half_array.repeated_permutation(2).to_a
+
+    full_array.each { |location| grid[location] = nil }
+
+    return grid
+  end
+
+  def make_pieces
+    pieces = []
+  
+    pieces.push(
+    Rook.new('white', [0, 0]),
+    Rook.new('white', [7, 0]),  
+    Rook.new('black', [0, 7]),
+    Rook.new('black', [7, 7]),
+  
+    Bishop.new('white', [2, 0]),
+    Bishop.new('white', [5, 0]),  
+    Bishop.new('black', [2, 7]),
+    Bishop.new('black', [5, 7]),
+  
+    Knight.new('white', [1, 0]),
+    Knight.new('white', [6, 0]),  
+    Knight.new('black', [1, 7]),
+    Knight.new('black', [6, 7]),
+  
+    Queen.new('white', [3, 0]),
+    King.new('white', [4, 0]),
+  
+    Queen.new('black', [3, 7]),
+    King.new('black', [4, 7])
+    )
+  
+    white_pawn_count = 0
+    8.times {
+      pieces.push( Pawn.new('white', [white_pawn_count, 1]) )
+      white_pawn_count += 1
+    }
+  
+    black_pawn_count = 0
+    8.times {
+      pieces.push( Pawn.new('black', [black_pawn_count, 6]) )
+      black_pawn_count += 1
+    }
+    
+    return pieces
   end
 #
 end
