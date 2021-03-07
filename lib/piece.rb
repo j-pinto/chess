@@ -1,5 +1,5 @@
 class Piece
-  attr_reader :location, :color, :moveset, :unicode
+  attr_reader :location, :color, :moveset, :unicode, :reachable_locations
   attr_accessor :has_moved
 
   def initialize(color, initial_location)
@@ -8,6 +8,29 @@ class Piece
     @location = initial_location
     @moveset = get_moveset(self)
     @unicode = add_unicode(self)
+
+    @reachable_locations = []
+  end
+
+  public 
+
+  def update_reachable_locations(board)
+    reachable_locations = []
+    @moveset.each do |move|
+      square = @location.clone
+      7.times {
+        square[0] += move[0]
+        square[1] += move[1]
+
+        break if board.friendly_occupied?(square, self.color)
+        break if !( board.in_bounds?(square) )
+
+        reachable_locations.push(square.clone)
+        break if board.enemy_occupied?(square, self.color)
+      }
+    end
+
+    @reachable_locations = reachable_locations
   end
 
   private
