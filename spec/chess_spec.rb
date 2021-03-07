@@ -76,5 +76,46 @@ describe Queen do
   end
 end
 
+describe King do
+  describe '#update_reachable_locations' do
+    it "Returns array of squares reachable by piece from current location. For King, a max of one step in any direction is allowed. May reach enemy occupied squares. Cannot reach friendly occupied or out of bounds sqaures" do
+      #create new board, then wipe all pieces
+      board = Board.new
+      board.grid.each_pair { |square, piece| board.grid[square] = nil }
+
+      #create new pieces at specific locations for tests
+      king = King.new('white', [1,1])
+      board.grid[[1,1]] = king
+      board.grid[[1,5]] = Pawn.new('black', [1,5])
+      board.grid[[1,0]] = Pawn.new('black', [2,0])
+      board.grid[[0,1]] = Pawn.new('white', [0,1])
+
+      expected_array = [ [0,0], [1,0], [2,0], [2,1], [0,2], [1,2], [2,2] ]
+      actual_array = king.update_reachable_locations(board)
+      expect(expected_array & actual_array).to eql(expected_array)
+    end
+  end
+end
+
+describe Knight do
+  describe '#update_reachable_locations' do
+    it "Returns array of squares reachable by piece from current location. For Knight, a max of one jump is allowed. May reach enemy occupied squares. Cannot reach friendly occupied or out of bounds sqaures" do
+      #create new board, then wipe all pieces
+      board = Board.new
+      board.grid.each_pair { |square, piece| board.grid[square] = nil }
+
+      #create new pieces at specific locations for tests
+      knight = Knight.new('white', [1,1])
+      board.grid[[1,1]] = knight
+      board.grid[[2,3]] = Pawn.new('black', [2,3])
+      board.grid[[3,2]] = Pawn.new('white', [3,2])
+
+      expected_array = [ [3,0], [0,3], [2,3] ]
+      actual_array = knight.update_reachable_locations(board)
+      expect(expected_array & actual_array).to eql(expected_array)
+    end
+  end
+end
+
 
 
