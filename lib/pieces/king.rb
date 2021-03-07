@@ -3,6 +3,8 @@ class King < Piece
   def initialize(color, initial_location)
     super
     @in_check = false
+    @castle_short_available = false
+    @castle_long_available = false
   end
 
   public
@@ -22,5 +24,38 @@ class King < Piece
     end
 
     @reachable_locations = reachable_locations
+  end
+
+  def castle_short_available?(board)
+    self.color == 'white' ? rank = 0 : rank = 7
+    return false unless board.empty?( [5, rank] )
+    return false unless board.empty?( [6, rank] )
+
+    partner = board.get_piece( [7, rank] )
+    return false unless partner.is_a?(Rook)
+    return false unless partner.color == self.color
+    return false if partner.has_moved
+
+    return false unless self.location == [4, rank]
+    return false if self.has_moved
+
+    return true
+  end
+
+  def castle_long_available?(board)
+    self.color == 'white' ? rank = 0 : rank = 7
+    return false unless board.empty?( [3, rank] )
+    return false unless board.empty?( [2, rank] )
+    return false unless board.empty?( [1, rank] )
+
+    partner = board.get_piece( [0, rank] )
+    return false unless partner.is_a?(Rook)
+    return false unless partner.color == self.color
+    return false if partner.has_moved
+
+    return false unless self.location == [4, rank]
+    return false if self.has_moved
+
+    return true
   end
 end
