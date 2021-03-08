@@ -451,8 +451,8 @@ describe EnPassMove do
   end
 end
 
-describe EnPassMove do
-  it "assigns correct start, finish, selected pawn and captured pawn given a valid en pass" do
+describe CastleMove do
+  it "assigns correct start, finish, selected king and rook given a valid castle" do
   mock_board = Board.new
   mock_board.grid[[1,7]] = nil
   mock_board.grid[[2,7]] = nil
