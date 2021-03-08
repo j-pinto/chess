@@ -321,6 +321,34 @@ describe MoveTypeSelector do
       expect(move_type_selector.output).to eql('EN_PASS')
     end
   end
+
+  describe '#is_capture?' do
+    it 'returns true if move is a capture and is valid' do
+      mock_board = Board.new
+      mock_board.grid.each_pair { |square, piece| mock_board.grid[square] = nil }
+
+      knight = Knight.new('white', [1,4])
+      mock_board.grid[[1,4]] = knight
+
+      target = Pawn.new('black', [3,5])
+      mock_board.grid[[3,5]] = target
+
+      mock_input = double('input')
+      allow(mock_input).to receive(:start) {[1,4]}
+      allow(mock_input).to receive(:finish) {[3,5]}
+  
+      mock_turn = double('turn')
+      mock_player = Player.new('white')
+      allow(mock_turn).to receive(:current_player) {mock_player}
+
+      knight.update_reachable_locations(mock_board)
+      move_type_selector = MoveTypeSelector.new(mock_turn, mock_input, mock_board)
+      expect(move_type_selector.start_valid?).to eql(true)
+      expect(move_type_selector.is_capture?).to eql(true)
+      move_type_selector.set_output()
+      expect(move_type_selector.output).to eql('CAPTURE')
+    end
+  end
 #
 end
 
