@@ -292,6 +292,35 @@ describe MoveTypeSelector do
       expect(move_type_selector.output).to eql('INVALID')
     end
   end
+
+  describe '#is_en_pass?' do
+    it 'returns true if move given is an en passant and is valid' do
+      mock_board = Board.new
+      mock_board.grid.each_pair { |square, piece| mock_board.grid[square] = nil }
+
+      white_pawn = Pawn.new('white', [1,4])
+      mock_board.grid[[1,4]] = white_pawn
+
+      target_pawn = Pawn.new('black', [0,4])
+      target_pawn.en_pass_vulnerable = true
+      mock_board.grid[[0,4]] = target_pawn
+
+      mock_input = double('input')
+      allow(mock_input).to receive(:start) {[1,4]}
+      allow(mock_input).to receive(:finish) {[0,5]}
+  
+      mock_turn = double('turn')
+      mock_player = Player.new('white')
+      allow(mock_turn).to receive(:current_player) {mock_player}
+
+      white_pawn.update_reachable_captures(mock_board)
+      move_type_selector = MoveTypeSelector.new(mock_turn, mock_input, mock_board)
+      expect(move_type_selector.start_valid?).to eql(true)
+      expect(move_type_selector.is_en_pass?).to eql(true)
+      move_type_selector.set_output()
+      expect(move_type_selector.output).to eql('EN_PASS')
+    end
+  end
 #
 end
 

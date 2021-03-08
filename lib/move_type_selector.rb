@@ -44,10 +44,8 @@ class MoveTypeSelector
 
     castle_ok = false
     if ( (delta_x < 0) && @piece.castle_short_available?(@board) )
-      puts 'castle is valid'
       castle_ok = true
     elsif ( (delta_x > 0) && @piece.castle_long_available?(@board) )
-      puts 'castle is valid'
       castle_ok = true
     end
 
