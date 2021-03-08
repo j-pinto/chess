@@ -394,11 +394,35 @@ describe StandardMove do
   allow(mock_selector).to receive(:output) {'STANDARD'}
   piece = mock_board.get_piece([0,1])
   allow(mock_selector).to receive(:piece) {piece}
-  
+
   move = StandardMove.new(mock_selector, mock_board)
   expect(move.selected_piece).to eql(piece)
-  expect(move.start).to eql([0,1])
-  expect(move.finish).to eql([0,2])
+  expect(move.start).to eql(mock_selector.start)
+  expect(move.finish).to eql(mock_selector.finish)
+  end
+end
+
+describe CaptureMove do
+  it "assigns correct start, finish, selected piece and captured piece given a valid capture" do
+  mock_board = Board.new
+  mock_board.grid.each_pair { |square, piece| mock_board.grid[square] = nil }
+
+  piece = Queen.new('black', [0,0])
+  target = Pawn.new('white', [5,5])
+  mock_board.grid[[0,0]] = piece
+  mock_board.grid[[5,5]] = target
+
+  mock_selector = double('move_type_selector')
+  allow(mock_selector).to receive(:start) { [0,0] }
+  allow(mock_selector).to receive(:finish) { [5,5] }
+  allow(mock_selector).to receive(:output) {'CAPTURE'}
+  allow(mock_selector).to receive(:piece) {piece}
+  
+  move = CaptureMove.new(mock_selector, mock_board)
+  expect(move.selected_piece).to eql(piece)
+  expect(move.captured_piece).to eql(target)
+  expect(move.start).to eql(mock_selector.start)
+  expect(move.finish).to eql(mock_selector.finish)
   end
 end
       
