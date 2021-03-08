@@ -425,4 +425,29 @@ describe CaptureMove do
   expect(move.finish).to eql(mock_selector.finish)
   end
 end
+
+describe EnPassMove do
+  it "assigns correct start, finish, selected pawn and captured pawn given a valid en pass" do
+  mock_board = Board.new
+  mock_board.grid.each_pair { |square, piece| mock_board.grid[square] = nil }
+
+  piece = Pawn.new('black', [0,4])
+  target = Pawn.new('white', [1,4])
+  target.en_pass_vulnerable = true
+  mock_board.grid[[0,4]] = piece
+  mock_board.grid[[1,4]] = target
+
+  mock_selector = double('move_type_selector')
+  allow(mock_selector).to receive(:start) { [0,4] }
+  allow(mock_selector).to receive(:finish) { [1,5] }
+  allow(mock_selector).to receive(:output) {'EN_PASS'}
+  allow(mock_selector).to receive(:piece) {piece}
+  
+  move = EnPassMove.new(mock_selector, mock_board)
+  expect(move.selected_piece).to eql(piece)
+  expect(move.captured_piece).to eql(target)
+  expect(move.start).to eql(mock_selector.start)
+  expect(move.finish).to eql(mock_selector.finish)
+  end
+end
       
