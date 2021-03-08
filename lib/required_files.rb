@@ -8,6 +8,7 @@ require_relative 'move_type_selector'
 require_relative 'move'
 require_relative 'capture'
 require_relative 'en_pass'
+require_relative 'castle'
 
 require_relative './pieces/piece'
 require_relative './pieces/piece_constants'
