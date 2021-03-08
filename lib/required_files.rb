@@ -4,6 +4,7 @@ require_relative 'board'
 require_relative 'game'
 require_relative 'graphics'
 require_relative 'input'
+require_relative 'move_type_selector'
 
 require_relative './pieces/piece'
 require_relative './pieces/piece_constants'
