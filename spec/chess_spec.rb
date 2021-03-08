@@ -349,7 +349,39 @@ describe MoveTypeSelector do
       expect(move_type_selector.output).to eql('CAPTURE')
     end
   end
-#
+
+  describe '#is_standard?' do
+    it 'returns true if move is standard and is valid' do
+      mock_board = Board.new
+      mock_board.grid[[0,6]] = nil
+
+      mock_input = double('input')
+      allow(mock_input).to receive(:start) {[0,7]}
+      allow(mock_input).to receive(:finish) {[0,3]}
+  
+      mock_turn = double('turn')
+      mock_player = Player.new('black')
+      allow(mock_turn).to receive(:current_player) {mock_player}
+
+      mock_board.grid[[0,7]].update_reachable_locations(mock_board)
+      move_type_selector = MoveTypeSelector.new(mock_turn, mock_input, mock_board)
+      expect(move_type_selector.start_valid?).to eql(true)
+      expect(move_type_selector.is_standard?).to eql(true)
+      move_type_selector.set_output()
+      expect(move_type_selector.output).to eql('STANDARD')
+
+      mock_input2 = double('input')
+      allow(mock_input2).to receive(:start) {[0,7]}
+      allow(mock_input2).to receive(:finish) {[1,3]}
+
+      move_type_selector = MoveTypeSelector.new(mock_turn, mock_input2, mock_board)
+      expect(move_type_selector.start_valid?).to eql(true)
+      expect(move_type_selector.is_standard?).to eql(false)
+      move_type_selector.set_output()
+      expect(move_type_selector.output).to eql('INVALID')
+    end
+  end
+
 end
 
 
