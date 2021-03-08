@@ -154,7 +154,8 @@ describe King do
       expect(white_king.castle_long_available?(board)).to eql(false)
 
       board.grid[[1,0]] = nil
-      board.grid[[0,0]] = Knight.new('white', [7,0])
+      not_a_rook = Knight.new('white', [7,0])
+      board.grid[[0,0]] = not_a_rook
       expect(white_king.castle_long_available?(board)).to eql(false)
 
       black_king.has_moved = true
@@ -236,6 +237,33 @@ describe Pawn do
       expect(white_pawn.update_reachable_captures(board)).to eql( [ [0,5] ] )
     end
   end
+end
+
+describe MoveTypeSelector do
+  describe '#start_valid?' do
+    it 'returns true if move given is a castle and castle is valid' do
+      mock_board = Board.new
+
+      mock_input = double('input')
+      allow(mock_input).to receive(:start) {[0,0]}
+      allow(mock_input).to receive(:finish) {[0,1]}
+
+      mock_turn = double('turn')
+      mock_player = Player.new('white')
+      allow(mock_turn).to receive(:current_player) {mock_player}
+
+      mock_turn2 = double('turn')
+      mock_player2 = Player.new('black')
+      allow(mock_turn2).to receive(:current_player) {mock_player2}
+
+      move_type_selector = MoveTypeSelector.new(mock_turn, mock_input, mock_board)
+      expect(move_type_selector.start_valid?).to eql(true)
+
+      move_type_selector = MoveTypeSelector.new(mock_turn2, mock_input, mock_board)
+      expect(move_type_selector.start_valid?).to eql(false)
+    end
+  end
+#
 end
 
 
