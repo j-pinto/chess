@@ -263,6 +263,35 @@ describe MoveTypeSelector do
       expect(move_type_selector.start_valid?).to eql(false)
     end
   end
+
+  describe '#is_castle?' do
+    it 'returns true if move given is a castle and castle is valid' do
+      mock_board = Board.new
+      mock_board.grid[[5,0]] = nil
+      mock_board.grid[[6,0]] = nil
+  
+      mock_input = double('input')
+      allow(mock_input).to receive(:start) {[4,0]}
+      allow(mock_input).to receive(:finish) {[6,0]}
+  
+      mock_turn = double('turn')
+      mock_player = Player.new('white')
+      allow(mock_turn).to receive(:current_player) {mock_player}
+  
+      move_type_selector = MoveTypeSelector.new(mock_turn, mock_input, mock_board)
+      expect(move_type_selector.start_valid?).to eql(true)
+      expect(move_type_selector.is_castle?).to eql(true)
+      move_type_selector.set_output()
+      expect(move_type_selector.output).to eql('CASTLE')
+  
+      mock_board2 = Board.new
+      move_type_selector = MoveTypeSelector.new(mock_turn, mock_input, mock_board2)
+      expect(move_type_selector.start_valid?).to eql(true)
+      expect(move_type_selector.is_castle?).to eql(false)
+      move_type_selector.set_output()
+      expect(move_type_selector.output).to eql('INVALID')
+    end
+  end
 #
 end
 
