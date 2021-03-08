@@ -384,4 +384,21 @@ describe MoveTypeSelector do
 
 end
 
+describe StandardMove do
+  it "assigns correct start, finish and selected piece given a valid standard move" do
+  mock_board = Board.new
 
+  mock_selector = double('move_type_selector')
+  allow(mock_selector).to receive(:start) { [0,1] }
+  allow(mock_selector).to receive(:finish) { [0,2] }
+  allow(mock_selector).to receive(:output) {'STANDARD'}
+  piece = mock_board.get_piece([0,1])
+  allow(mock_selector).to receive(:piece) {piece}
+  
+  move = StandardMove.new(mock_selector, mock_board)
+  expect(move.selected_piece).to eql(piece)
+  expect(move.start).to eql([0,1])
+  expect(move.finish).to eql([0,2])
+  end
+end
+      

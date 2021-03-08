@@ -1,5 +1,5 @@
 class MoveTypeSelector
-  attr_reader :output
+  attr_reader :start, :finish, :piece, :output
   def initialize(turn, input, board)
     @board = board
     @start = input.start
