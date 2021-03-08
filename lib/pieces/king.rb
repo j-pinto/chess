@@ -3,8 +3,8 @@ class King < Piece
   def initialize(color, initial_location)
     super
     @in_check = false
-    @castle_short_available = false
-    @castle_long_available = false
+    @can_castle_short = false
+    @can_castle_long = false
   end
 
   public
@@ -23,6 +23,8 @@ class King < Piece
       next if board.enemy_occupied?(square, self.color)
     end
 
+    @can_castle_long = castle_long_available?(board)
+    @can_castle_short = castle_short_available?(board)
     @reachable_locations = reachable_locations
   end
 
