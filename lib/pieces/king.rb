@@ -1,4 +1,5 @@
 class King < Piece
+  attr_reader :can_castle_short, :can_castle_long
   attr_accessor :in_check
   def initialize(color, initial_location)
     super
@@ -10,6 +11,9 @@ class King < Piece
   public
 
   def update_reachable_locations(board)
+    @can_castle_long = castle_long_available?(board)
+    @can_castle_short = castle_short_available?(board)
+    
     reachable_locations = []
     @moveset.each do |move|
       square = @location.clone
@@ -23,8 +27,6 @@ class King < Piece
       next if board.enemy_occupied?(square, self.color)
     end
 
-    @can_castle_long = castle_long_available?(board)
-    @can_castle_short = castle_short_available?(board)
     @reachable_locations = reachable_locations
   end
 

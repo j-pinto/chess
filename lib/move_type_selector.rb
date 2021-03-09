@@ -1,18 +1,20 @@
 class MoveTypeSelector
-  attr_reader :start, :finish, :piece, :output
+  attr_reader :start, :finish, :current_player, :piece, :output
   def initialize(turn, input, board)
     @board = board
     @start = input.start
     @finish = input.finish
     @current_player = turn.current_player
-    @piece = nil
+    @piece = board.get_piece(@start)
     @output = nil
   end
 
   def set_output
-    if !( start_valid?() )
-      @output = 'INVALID' 
-    elsif is_castle?()
+    unless start_valid?()
+      @output = 'INVALID'
+    end
+
+    if is_castle?()
       @output = 'CASTLE'
     elsif is_en_pass?()
       @output = 'EN_PASS'
@@ -27,7 +29,6 @@ class MoveTypeSelector
 
   def start_valid?
     if @board.friendly_occupied?(@start, @current_player.color)
-      @piece = @board.get_piece(@start)
       return true
     else
       return false 
@@ -43,9 +44,9 @@ class MoveTypeSelector
     return false unless delta_x.abs() == 2
 
     castle_ok = false
-    if ( (delta_x < 0) && @piece.castle_short_available?(@board) )
+    if ( (delta_x < 0) && @piece.can_castle_short )
       castle_ok = true
-    elsif ( (delta_x > 0) && @piece.castle_long_available?(@board) )
+    elsif ( (delta_x > 0) && @piece.can_castle_long )
       castle_ok = true
     end
 

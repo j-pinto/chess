@@ -1,6 +1,6 @@
 require './lib/required_files.rb'
 
-describe Input do
+ describe Input do
   describe "#valid?" do
     it "returns true if input string is correct format and in bounds" do
       input = Input.new
@@ -14,9 +14,9 @@ describe Input do
       expect(input.valid?('foo')).to eql(false)
     end
   end
-end
-
-describe Rook do
+ end
+ 
+ describe Rook do
   describe '#update_reachable_locations' do
     it "Returns array of squares reachable by piece from current location. Array has all empty squares in the piece's movement path. Array includes squares occupied by enemy pieces, but no squares beyond it. Does not return squares out of bounds, does not return squares occupied by, or beyond, a friendly piece." do
       #create new board, then wipe all pieces
@@ -33,9 +33,9 @@ describe Rook do
       expect(rook.update_reachable_locations(board)).to eql(expected_reachable)
     end
   end
-end
-
-describe Bishop do
+ end
+ 
+ describe Bishop do
   describe '#update_reachable_locations' do
     it "Returns array of squares reachable by piece from current location. Array has all empty squares in the piece's movement path. Array includes squares occupied by enemy pieces, but no squares beyond it. Does not return squares out of bounds, does not return squares occupied by, or beyond, a friendly piece." do
       #create new board, then wipe all pieces
@@ -52,9 +52,9 @@ describe Bishop do
       expect(bishop.update_reachable_locations(board)).to eql(expected_reachable)
     end
   end
-end
-
-describe Queen do
+ end
+ 
+ describe Queen do
   describe '#update_reachable_locations' do
     it "Returns array of squares reachable by piece from current location. Array has all empty squares in the piece's movement path. Array includes squares occupied by enemy pieces, but no squares beyond it. Does not return squares out of bounds, does not return squares occupied by, or beyond, a friendly piece." do
       #create new board, then wipe all pieces
@@ -74,9 +74,9 @@ describe Queen do
       expect(queen.update_reachable_locations(board)).to eql(expected_reachable)
     end
   end
-end
-
-describe King do
+ end
+ 
+ describe King do
   describe '#update_reachable_locations' do
     it "Returns array of squares reachable by piece from current location. For King, a max of one step in any direction is allowed. May reach enemy occupied squares. Cannot reach friendly occupied or out of bounds sqaures" do
       #create new board, then wipe all pieces
@@ -115,6 +115,10 @@ describe King do
 
       expect(white_king.castle_short_available?(board)).to eql(true)
       expect(black_king.castle_short_available?(board)).to eql(true)
+      white_king.update_reachable_locations(board)
+      black_king.update_reachable_locations(board)
+      expect(white_king.can_castle_short).to eql(true)
+      expect(black_king.can_castle_short).to eql(true)
 
       blocking_piece = Pawn.new('white', [5,0])
       board.grid[[5,0]] = blocking_piece
@@ -148,6 +152,10 @@ describe King do
 
       expect(white_king.castle_long_available?(board)).to eql(true)
       expect(black_king.castle_long_available?(board)).to eql(true)
+      white_king.update_reachable_locations(board)
+      black_king.update_reachable_locations(board)
+      expect(white_king.can_castle_long).to eql(true)
+      expect(black_king.can_castle_long).to eql(true)
 
       blocking_piece = Pawn.new('white', [1,0])
       board.grid[[1,0]] = blocking_piece
@@ -162,9 +170,9 @@ describe King do
       expect(black_king.castle_long_available?(board)).to eql(false)
     end
   end
-end
-
-describe Knight do
+ end
+ 
+ describe Knight do
   describe '#update_reachable_locations' do
     it "Returns array of squares reachable by piece from current location. For Knight, a max of one jump is allowed. May reach enemy occupied squares. Cannot reach friendly occupied or out of bounds sqaures" do
       #create new board, then wipe all pieces
@@ -182,9 +190,9 @@ describe Knight do
       expect(expected_array & actual_array).to eql(expected_array)
     end
   end
-end
-
-describe Pawn do
+ end
+ 
+ describe Pawn do
   describe '#update_reachable_locations' do
     it "returns two steps ahead of pawn if pawn has not been moved" do
       board = Board.new
@@ -237,9 +245,9 @@ describe Pawn do
       expect(white_pawn.update_reachable_captures(board)).to eql( [ [0,5] ] )
     end
   end
-end
-
-describe MoveTypeSelector do
+ end
+ 
+ describe MoveTypeSelector do
   describe '#start_valid?' do
     it 'returns true if move given is a castle and castle is valid' do
       mock_board = Board.new
@@ -269,6 +277,8 @@ describe MoveTypeSelector do
       mock_board = Board.new
       mock_board.grid[[5,0]] = nil
       mock_board.grid[[6,0]] = nil
+      king = mock_board.get_piece([4,0])
+      king.update_reachable_locations(mock_board)
   
       mock_input = double('input')
       allow(mock_input).to receive(:start) {[4,0]}
@@ -382,9 +392,9 @@ describe MoveTypeSelector do
     end
   end
 
-end
-
-describe StandardMove do
+ end
+ 
+ describe StandardMove do
   it "assigns correct start, finish and selected piece given a valid standard move" do
   mock_board = Board.new
 
@@ -400,9 +410,9 @@ describe StandardMove do
   expect(move.start).to eql(mock_selector.start)
   expect(move.finish).to eql(mock_selector.finish)
   end
-end
-
-describe CaptureMove do
+ end
+ 
+ describe CaptureMove do
   it "assigns correct start, finish, selected piece and captured piece given a valid capture" do
   mock_board = Board.new
   mock_board.grid.each_pair { |square, piece| mock_board.grid[square] = nil }
@@ -424,9 +434,9 @@ describe CaptureMove do
   expect(move.start).to eql(mock_selector.start)
   expect(move.finish).to eql(mock_selector.finish)
   end
-end
-
-describe EnPassMove do
+ end
+ 
+ describe EnPassMove do
   it "assigns correct start, finish, selected pawn and captured pawn given a valid en pass" do
   mock_board = Board.new
   mock_board.grid.each_pair { |square, piece| mock_board.grid[square] = nil }
@@ -439,19 +449,19 @@ describe EnPassMove do
 
   mock_selector = double('move_type_selector')
   allow(mock_selector).to receive(:start) { [0,4] }
-  allow(mock_selector).to receive(:finish) { [1,5] }
+  allow(mock_selector).to receive(:finish) { [1,3] }
   allow(mock_selector).to receive(:output) {'EN_PASS'}
   allow(mock_selector).to receive(:piece) {piece}
   
   move = EnPassMove.new(mock_selector, mock_board)
-  expect(move.selected_piece).to eql(piece)
-  expect(move.captured_piece).to eql(target)
   expect(move.start).to eql(mock_selector.start)
   expect(move.finish).to eql(mock_selector.finish)
+  expect(move.selected_piece).to eql(piece)
+  expect(move.captured_piece).to eql(target)
   end
-end
-
-describe CastleMove do
+ end
+ 
+ describe CastleMove do
   it "assigns correct start, finish, selected king and rook given a valid castle" do
   mock_board = Board.new
   mock_board.grid[[1,7]] = nil
@@ -472,5 +482,143 @@ describe CastleMove do
   expect(move.start).to eql(mock_selector.start)
   expect(move.finish).to eql(mock_selector.finish)
   end
+ end
+
+describe Move do
+  it 'returns correct standard move data given correct input' do
+
+    mock_board = Board.new()
+    start = [0,1]
+    finish = [0,3]
+    piece = mock_board.get_piece(start)
+    piece.update_reachable_locations(mock_board)
+
+    mock_turn = double('turn')
+    allow(mock_turn).to receive(:current_player) { Player.new('white') }
+
+    mock_input = double('input')
+    allow(mock_input).to receive(:start) { start }
+    allow(mock_input).to receive(:finish) { finish }
+
+    move = nil
+    selector = MoveTypeSelector.new(mock_turn, mock_input, mock_board)
+    expect(selector.start).to eql(start)
+    expect(selector.finish).to eql(finish)
+    selector.set_output()
+    expect(selector.piece).to eql(piece)
+    expect(selector.output).to eql('STANDARD')
+
+    move = StandardMove.new(selector, mock_board)
+    expect(move.start).to eql(start)
+    expect(move.finish).to eql(finish)
+    expect(move.selected_piece).to eql(piece)
+  end
+
+  it 'returns correct capture move data given correct input' do
+
+    mock_board = Board.new()
+    mock_board.grid.each_pair { |square, piece| mock_board.grid[square] = nil }
+    start = [3,3]
+    finish = [0,0]
+    mock_board.grid[start] = Bishop.new('black', start)
+    mock_board.grid[finish] = Queen.new('white', finish)
+    piece = mock_board.get_piece(start)
+    target = mock_board.get_piece(finish)
+    piece.update_reachable_locations(mock_board)
+
+    mock_turn = double('turn')
+    allow(mock_turn).to receive(:current_player) { Player.new('black') }
+
+    mock_input = double('input')
+    allow(mock_input).to receive(:start) { start }
+    allow(mock_input).to receive(:finish) { finish }
+
+    move = nil
+    selector = MoveTypeSelector.new(mock_turn, mock_input, mock_board)
+    expect(selector.start).to eql(start)
+    expect(selector.finish).to eql(finish)
+    selector.set_output()
+    expect(selector.piece).to eql(piece)
+    expect(selector.output).to eql('CAPTURE')
+
+    move = CaptureMove.new(selector, mock_board)
+    expect(move.start).to eql(start)
+    expect(move.finish).to eql(finish)
+    expect(move.selected_piece).to eql(piece)
+    expect(move.captured_piece).to eql(target)
+  end
+
+  it 'returns correct en pass move data given correct input' do
+
+    mock_board = Board.new()
+    mock_board.grid.each_pair { |square, piece| mock_board.grid[square] = nil }
+    start = [0,3]
+    finish = [1,2]
+    ep_target_location = [1,3]
+    mock_board.grid[start] = Pawn.new('black', start)
+    mock_board.grid[ep_target_location] = Pawn.new('white', ep_target_location)
+    piece = mock_board.get_piece(start)
+    target = mock_board.get_piece(ep_target_location)
+
+    target.en_pass_vulnerable = true
+    piece.update_reachable_locations(mock_board)
+
+    mock_turn = double('turn')
+    allow(mock_turn).to receive(:current_player) { Player.new('black') }
+
+    mock_input = double('input')
+    allow(mock_input).to receive(:start) { start }
+    allow(mock_input).to receive(:finish) { finish }
+
+    move = nil
+    selector = MoveTypeSelector.new(mock_turn, mock_input, mock_board)
+    expect(selector.start).to eql(start)
+    expect(selector.finish).to eql(finish)
+    selector.set_output()
+    expect(selector.piece).to eql(piece)
+    expect(selector.output).to eql('EN_PASS')
+
+    move = EnPassMove.new(selector, mock_board)
+    expect(move.start).to eql(start)
+    expect(move.finish).to eql(finish)
+    expect(move.selected_piece).to eql(piece)
+    expect(move.captured_piece).to eql(target)
+  end
+
+  it 'returns correct castle move data given correct input' do
+
+    mock_board = Board.new()
+    mock_board.grid[[1,7]] = nil
+    mock_board.grid[[2,7]] = nil
+    mock_board.grid[[3,7]] = nil
+
+    start = [4,7]
+    finish = [2,7]
+    king = mock_board.get_piece(start)
+    rook = mock_board.get_piece([0,7])
+    king.update_reachable_locations(mock_board)
+
+    mock_turn = double('turn')
+    player = Player.new('black')
+    allow(mock_turn).to receive(:current_player) { player }
+
+    mock_input = double('input')
+    allow(mock_input).to receive(:start) { start }
+    allow(mock_input).to receive(:finish) { finish }
+
+    selector = MoveTypeSelector.new(mock_turn, mock_input, mock_board)
+    expect(selector.start).to eql(start)
+    expect(selector.finish).to eql(finish)
+    expect(selector.piece).to eql(king)
+    expect(selector.current_player).to eql(player)
+    selector.set_output()
+    expect(selector.is_castle?).to eql(true)
+    expect(selector.output).to eql('CASTLE')
+
+    move = CastleMove.new(selector, mock_board)
+    expect(move.start).to eql(start)
+    expect(move.finish).to eql(finish)
+    expect(move.king).to eql(king)
+    expect(move.rook).to eql(rook)
+  end
 end
-      

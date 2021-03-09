@@ -37,13 +37,11 @@ class Pawn < Piece
       square[0] += move[0]
       square[1] += move[1]
   
-      en_pass_square = [square[0], (square[1] - 1)]
-  
       next if board.friendly_occupied?(square, self.color)
       next if !( board.in_bounds?(square) )
   
       if board.enemy_occupied?(square, self.color) ||
-        en_pass_possible?(en_pass_square, board)
+        en_pass_possible?(square, board)
       then
         reachable_captures.push(square.clone)
       end
@@ -53,9 +51,12 @@ class Pawn < Piece
   end
   
   def en_pass_possible?(square, board)
-    return false unless board.enemy_occupied?(square, self.color)
+    rank_adjust = nil
+    self.color == 'white' ? rank_adjust = -1 : rank_adjust = 1
+    en_pass_square = [square[0], (square[1] + rank_adjust)]
+    return false unless board.enemy_occupied?(en_pass_square, self.color)
   
-    target = board.get_piece(square) 
+    target = board.get_piece(en_pass_square) 
     return false unless target.is_a?(Pawn)
     return false unless target.en_pass_vulnerable
   
