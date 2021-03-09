@@ -683,4 +683,39 @@ describe TemporaryUpdate do
     expect(temp_update.board.get_piece(finish)).to eql(target)
     expect(temp_update.board.get_piece(start)).to eql(piece)
   end
+
+  it 'execute() updates board according to capture move data, revert() undoes change' do
+    mock_board = Board.new()
+    start = [0,4]
+    finish = [1,5]
+    piece = Pawn.new('white', start)
+    mock_board.grid[start] = piece
+    target = Pawn.new('black', [1,4])
+    mock_board.grid[[1,4]] = target
+    player = Player.new('white')
+    target.en_pass_vulnerable = true
+    piece.update_reachable_locations(mock_board)
+
+    mock_turn = double('turn')
+    allow(mock_turn).to receive(:current_player) { player }
+    
+    mock_input = double('input')
+    allow(mock_input).to receive(:start) { start }
+    allow(mock_input).to receive(:finish) { finish }
+
+    selector = MoveTypeSelector.new(mock_turn, mock_input, mock_board)
+    move = EnPassMove.new(selector, mock_board)
+    temp_update = TemporaryUpdate.new(move)
+
+    temp_update.execute()
+    expect(temp_update.board.get_piece(finish)).to eql(piece)
+    expect(temp_update.board.get_piece(start)).to eql(nil)
+    expect(temp_update.move.captured_piece).to eql(target)
+    expect(temp_update.board.get_piece(move.target_location)).to eql(nil)
+
+    temp_update.revert()
+    expect(temp_update.board.get_piece(finish)).to eql(nil)
+    expect(temp_update.board.get_piece(start)).to eql(piece)
+    expect(temp_update.board.get_piece(move.target_location)).to eql(target)
+  end
 end
