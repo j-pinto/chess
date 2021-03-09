@@ -644,11 +644,11 @@ describe TemporaryUpdate do
     temp_update = TemporaryUpdate.new(move)
 
     temp_update.execute()
-    expect(temp_update.move.board.get_piece(finish)).to eql(piece)
-    expect(temp_update.move.board.get_piece(start)).to eql(nil)
+    expect(temp_update.board.get_piece(finish)).to eql(piece)
+    expect(temp_update.board.get_piece(start)).to eql(nil)
 
     temp_update.revert()
-    expect(temp_update.move.board.get_piece(finish)).to eql(nil)
-    expect(temp_update.move.board.get_piece(start)).to eql(piece)
+    expect(temp_update.board.get_piece(finish)).to eql(nil)
+    expect(temp_update.board.get_piece(start)).to eql(piece)
   end
 end
