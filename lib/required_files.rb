@@ -6,6 +6,7 @@ require_relative 'graphics'
 require_relative 'input'
 require_relative 'player'
 require_relative 'turn'
+require_relative 'temp_update'
 
 require_relative './moves/move_type_selector'
 require_relative './moves/move'

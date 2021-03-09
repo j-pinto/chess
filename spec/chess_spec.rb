@@ -622,3 +622,33 @@ describe Move do
     expect(move.rook).to eql(rook)
   end
 end
+
+describe TemporaryUpdate do
+  it 'execute() updates board according to standard move data, revert() undoes change' do
+    mock_board = Board.new()
+    player = Player.new('white')
+    start = [0,1]
+    finish = [0,2]
+    piece = mock_board.get_piece(start)
+    piece.update_reachable_locations(mock_board)
+
+    mock_turn = double('turn')
+    allow(mock_turn).to receive(:current_player) { player }
+    
+    mock_input = double('input')
+    allow(mock_input).to receive(:start) { start }
+    allow(mock_input).to receive(:finish) { finish }
+
+    selector = MoveTypeSelector.new(mock_turn, mock_input, mock_board)
+    move = StandardMove.new(selector, mock_board)
+    temp_update = TemporaryUpdate.new(move)
+
+    temp_update.execute()
+    expect(temp_update.move.board.get_piece(finish)).to eql(piece)
+    expect(temp_update.move.board.get_piece(start)).to eql(nil)
+
+    temp_update.revert()
+    expect(temp_update.move.board.get_piece(finish)).to eql(nil)
+    expect(temp_update.move.board.get_piece(start)).to eql(piece)
+  end
+end

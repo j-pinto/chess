@@ -1,5 +1,5 @@
 class Move
-  attr_reader :start, :finish, :selected_piece
+  attr_reader :board, :start, :finish, :selected_piece
   def initialize(move_type_selector, board)
     @board = board
     @start = move_type_selector.start
