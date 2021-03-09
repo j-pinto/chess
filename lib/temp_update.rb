@@ -21,7 +21,7 @@ class TemporaryUpdate
       @board.grid[@move.finish] = nil
     end
 
-    if ( @move.is_a?(CaptureMove) && !(@move.is_a?(EnPassMove)) )
+    if @move.is_a?(CaptureMove)
       @board.grid[@move.finish] = @move.captured_piece
     elsif @move.is_a?(EnPassMove)
       @board.grid[@move.target_location] = @move.captured_piece

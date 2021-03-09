@@ -684,7 +684,7 @@ describe TemporaryUpdate do
     expect(temp_update.board.get_piece(start)).to eql(piece)
   end
 
-  it 'execute() updates board according to capture move data, revert() undoes change' do
+  it 'execute() updates board according to en pass move data, revert() undoes change' do
     mock_board = Board.new()
     start = [0,4]
     finish = [1,5]
