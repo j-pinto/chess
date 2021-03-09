@@ -677,7 +677,7 @@ describe TemporaryUpdate do
     temp_update.execute()
     expect(temp_update.board.get_piece(finish)).to eql(piece)
     expect(temp_update.board.get_piece(start)).to eql(nil)
-    expect(temp_update.captured_piece).to eql(target)
+    expect(temp_update.move.captured_piece).to eql(target)
 
     temp_update.revert()
     expect(temp_update.board.get_piece(finish)).to eql(target)
