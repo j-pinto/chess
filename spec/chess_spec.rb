@@ -475,6 +475,7 @@ require './lib/required_files.rb'
   allow(mock_selector).to receive(:finish) { [2,7] }
   allow(mock_selector).to receive(:output) {'CASTLE'}
   allow(mock_selector).to receive(:piece) {king}
+  allow(mock_selector).to receive(:current_player) {Player.new('black')}
   
   move = CastleMove.new(mock_selector, mock_board)
   expect(move.king).to eql(king)
@@ -717,5 +718,43 @@ describe TemporaryUpdate do
     expect(temp_update.board.get_piece(finish)).to eql(nil)
     expect(temp_update.board.get_piece(start)).to eql(piece)
     expect(temp_update.board.get_piece(move.target_location)).to eql(target)
+  end
+
+  it 'execute() updates board according to castle move data, revert() undoes change' do
+    player = Player.new('white')
+    mock_board = Board.new()
+    mock_board.grid[[1,0]] = nil    
+    mock_board.grid[[2,0]] = nil
+    mock_board.grid[[3,0]] = nil    
+    start = [4,0]
+    finish = [2,0]
+    king = mock_board.get_piece(start)
+    king.update_reachable_locations(mock_board)
+
+    mock_turn = double('turn')
+    allow(mock_turn).to receive(:current_player) { player }
+    
+    mock_input = double('input')
+    allow(mock_input).to receive(:start) { start }
+    allow(mock_input).to receive(:finish) { finish }
+
+    selector = MoveTypeSelector.new(mock_turn, mock_input, mock_board)
+    move = CastleMove.new(selector, mock_board)
+    rook = move.rook
+    rook_start = move.rook_start
+    rook_finish = move.rook_finish
+    temp_update = TemporaryUpdate.new(move)
+
+    temp_update.execute()
+    expect(temp_update.board.get_piece(finish)).to eql(king)
+    expect(temp_update.board.get_piece(start)).to eql(nil)
+    expect(temp_update.board.get_piece(rook_start)).to eql(nil)
+    expect(temp_update.board.get_piece(rook_finish)).to eql(rook)
+
+    temp_update.revert()
+    expect(temp_update.board.get_piece(finish)).to eql(nil)
+    expect(temp_update.board.get_piece(start)).to eql(king)
+    expect(temp_update.board.get_piece(rook_start)).to eql(rook)
+    expect(temp_update.board.get_piece(rook_finish)).to eql(nil)
   end
 end
