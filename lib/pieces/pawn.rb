@@ -18,11 +18,10 @@ class Pawn < Piece
       square[0] += move[0]
       square[1] += move[1]
   
-      break if board.friendly_occupied?(square, self.color)
+      break if !( board.empty?(square) )
       break if !( board.in_bounds?(square) )
   
       reachable_locations.push(square.clone)
-      break if board.enemy_occupied?(square, self.color)
     }
   
     update_reachable_captures(board)
