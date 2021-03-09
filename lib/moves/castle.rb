@@ -1,5 +1,5 @@
 class CastleMove < Move
-  attr_reader :king, :rook
+  attr_reader :king, :rook, :rook_start, :rook_finish
   def initialize(move_type_selector, board)
     super
     @player_color = move_type_selector.current_player.color

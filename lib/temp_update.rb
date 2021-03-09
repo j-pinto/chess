@@ -11,20 +11,23 @@ class TemporaryUpdate
 
     if @move.is_a?(EnPassMove)
       @board.grid[@move.target_location] = nil
+    elsif @move.is_a?(CastleMove)
+      @board.grid[@move.rook_finish] = @move.rook
+      @board.grid[@move.rook_start] = nil
     end
   end
 
   def revert
     @board.grid[@move.start] = @move.selected_piece
-
-    if ( @move.is_a?(StandardMove) || @move.is_a?(EnPassMove) )
-      @board.grid[@move.finish] = nil
-    end
+    @board.grid[@move.finish] = nil
 
     if @move.is_a?(CaptureMove)
       @board.grid[@move.finish] = @move.captured_piece
     elsif @move.is_a?(EnPassMove)
       @board.grid[@move.target_location] = @move.captured_piece
+    elsif @move.is_a?(CastleMove)
+      @board.grid[@move.rook_finish] = nil
+      @board.grid[@move.rook_start] = @move.rook
     end
   end
 end
