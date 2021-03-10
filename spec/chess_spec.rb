@@ -865,4 +865,52 @@ describe Update do
       expect(temp_update.valid?()).to eql(false)
     end
   end
+
+  describe '#finalize' do
+    it 'results in correctly updated board given a valid standard move' do
+      game = Game.new()
+      board = game.board
+      puts ""
+      Graphics.print_board(board)
+      players = game.players
+      turn_count = game.turn_count
+      turn = Turn.new(turn_count, players)
+      mock_input = double('input')
+      start = [0,1]
+      finish = [0,2]
+      allow(mock_input).to receive(:start) {start}
+      allow(mock_input).to receive(:finish) {finish}
+      selector = MoveTypeSelector.new(turn, mock_input, board)
+      selector.set_output()
+      selector_output = selector.output
+      case selector_output
+      when 'STANDARD'
+        move = StandardMove.new(selector, board)
+      when 'CAPTURE'
+        move = CaptureMove.new(selector, board)
+      when 'EN_PASS'
+        move = EnPassMove.new(selector, board)
+      when 'CASTLE'
+        move = CastleMove.new(selector, board)
+      else
+        puts "selector error"
+      end
+
+      update = Update.new(move)
+      update.execute()
+      update.valid?() ? update.finalize() : update.revert()
+      Graphics.print_board(board)
+
+      board.grid.each_pair { |square, piece|
+        next if piece == nil
+        expect(piece.location).to eql(square)
+
+        if piece.location == finish
+          expect(piece.has_moved).to eql(true)
+        else
+          expect(piece.has_moved).to eql(false)
+        end
+      }
+    end
+  end
 end

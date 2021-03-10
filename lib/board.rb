@@ -5,6 +5,7 @@ class Board
     @pieces = make_pieces()
     @grid = make_grid()
     populate()
+    update_piece_data()
   end
 
   public
@@ -57,6 +58,12 @@ class Board
   end
 
   private
+
+  def update_piece_data
+    @pieces.each { |piece|
+      piece.update_reachable_locations(self)
+    }
+  end
 
   def populate
     @pieces.each do |piece|

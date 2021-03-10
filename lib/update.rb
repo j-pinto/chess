@@ -92,9 +92,9 @@ class Update
     }
   end
 
-  def enemy_king_in_check(current_player_color)
+  def enemy_king_in_check?
     enemy_color = nil
-    @move.current_player.color == white ? enemy_color = 'black' : enemy_color = 'white'
+    @move.current_player.color == 'white' ? enemy_color = 'black' : enemy_color = 'white'
 
     enemy_king_location = get_king_location(enemy_color)
     enemy_king_under_threat = location_under_threat?(enemy_king_location, enemy_color)
