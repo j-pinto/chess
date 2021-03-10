@@ -56,11 +56,7 @@ class Update
   def finalize
     en_pass_status_reset()
     check_status_reset()
-    @move.selected_piece.has_moved = true
-
-    if @move.is_a?(CastleMove)
-      @move.rook.has_moved = true
-    end
+    move_status_update()
 
     if ( @move.is_a?(CaptureMove) || @move.is_a?(EnPassMove) )
       @captured_piece = @move.captured_piece
@@ -124,5 +120,13 @@ class Update
         piece.en_pass_vulnerable = false
       end
     }
+  end
+
+  def move_status_update
+    @move.selected_piece.has_moved = true
+
+    if @move.is_a?(CastleMove)
+      @move.rook.has_moved = true
+    end
   end
 end
