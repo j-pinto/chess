@@ -1,16 +1,16 @@
 class Move
   attr_reader :board, :current_player, :start, :finish, :selected_piece
-  def initialize(move_type_selector, board)
-    @board = board
-    @current_player = move_type_selector.current_player
-    @start = move_type_selector.start
-    @finish = move_type_selector.finish
-    @selected_piece = move_type_selector.piece
+  def initialize(turn)
+    @board = turn.board
+    @current_player = turn.current_player
+    @start = turn.input.start
+    @finish = turn.input.finish
+    @selected_piece = @board.get_piece(@start)
   end
 end
 
 class StandardMove < Move
-  def initialize(move_type_selector, board)
+  def initialize(turn)
     super
   end
 end

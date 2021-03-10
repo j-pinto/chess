@@ -1,8 +1,8 @@
 class CaptureMove < Move
   attr_reader :captured_piece
-  def initialize(move_type_selector, board)
+  def initialize(turn)
     super
 
-    @captured_piece = board.get_piece(move_type_selector.finish)
+    @captured_piece = @board.get_piece(turn.input.finish)
   end
 end

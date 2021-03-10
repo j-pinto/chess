@@ -1,9 +1,9 @@
 class CastleMove < Move
   attr_reader :king, :rook, :rook_start, :rook_finish
-  def initialize(move_type_selector, board)
+  def initialize(turn)
     super
-    @player_color = move_type_selector.current_player.color
-    @king = move_type_selector.piece
+    @player_color = turn.current_player.color
+    @king = @board.get_piece(turn.input.start)
     @rook_data = get_rook_data()
     @rook = @rook_data['rook']
     @rook_start = @rook_data['rook_start']

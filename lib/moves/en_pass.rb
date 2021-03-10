@@ -1,6 +1,6 @@
 class EnPassMove < Move
   attr_reader :target_location, :captured_piece
-  def initialize(move_type_selector, board)
+  def initialize(turn)
     super
     @target_location = assign_target_location()
     @captured_piece = @board.get_piece(@target_location)

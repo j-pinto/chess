@@ -411,26 +411,32 @@ require './lib/required_files.rb'
  describe StandardMove do
   it "assigns correct start, finish and selected piece given a valid standard move" do
   mock_board = Board.new
-
-  mock_selector = double('move_type_selector')
-  allow(mock_selector).to receive(:start) { [0,1] }
-  allow(mock_selector).to receive(:finish) { [0,2] }
-  allow(mock_selector).to receive(:output) {'STANDARD'}
-  piece = mock_board.get_piece([0,1])
-  allow(mock_selector).to receive(:piece) {piece}
   player = Player.new('white')
-  allow(mock_selector).to receive(:current_player) {player}
+  
+  start = [0,1]
+  finish = [0,2]
+  mock_input = double('input')
+  allow(mock_input).to receive(:start) {start}
+  allow(mock_input).to receive(:finish) {finish}
+
+  piece = mock_board.get_piece(start)
+
+  mock_turn = double('turn')
+  allow(mock_turn).to receive(:board) {mock_board}
+  allow(mock_turn).to receive(:current_player) {player}
+  allow(mock_turn).to receive(:input) {mock_input}
 
 
-  move = StandardMove.new(mock_selector, mock_board)
+  move = StandardMove.new(mock_turn)
   expect(move.selected_piece).to eql(piece)
-  expect(move.start).to eql(mock_selector.start)
-  expect(move.finish).to eql(mock_selector.finish)
+  expect(move.start).to eql(start)
+  expect(move.finish).to eql(finish)
   end
  end
  
  describe CaptureMove do
   it "assigns correct start, finish, selected piece and captured piece given a valid capture" do
+  player = Player.new('black')
   mock_board = Board.new
   mock_board.grid.each_pair { |square, piece| mock_board.grid[square] = nil }
 
@@ -439,24 +445,28 @@ require './lib/required_files.rb'
   mock_board.grid[[0,0]] = piece
   mock_board.grid[[5,5]] = target
 
-  mock_selector = double('move_type_selector')
-  allow(mock_selector).to receive(:start) { [0,0] }
-  allow(mock_selector).to receive(:finish) { [5,5] }
-  allow(mock_selector).to receive(:output) {'CAPTURE'}
-  allow(mock_selector).to receive(:piece) {piece}
-  player = Player.new('black')
-  allow(mock_selector).to receive(:current_player) {player}
+  start = [0,0]
+  finish = [5,5]
+  mock_input = double('input')
+  allow(mock_input).to receive(:start) {start}
+  allow(mock_input).to receive(:finish) {finish}
+
+  mock_turn = double('turn')
+  allow(mock_turn).to receive(:board) {mock_board}
+  allow(mock_turn).to receive(:current_player) {player}
+  allow(mock_turn).to receive(:input) {mock_input}
   
-  move = CaptureMove.new(mock_selector, mock_board)
+  move = CaptureMove.new(mock_turn)
   expect(move.selected_piece).to eql(piece)
   expect(move.captured_piece).to eql(target)
-  expect(move.start).to eql(mock_selector.start)
-  expect(move.finish).to eql(mock_selector.finish)
+  expect(move.start).to eql(start)
+  expect(move.finish).to eql(finish)
   end
  end
  
  describe EnPassMove do
   it "assigns correct start, finish, selected pawn and captured pawn given a valid en pass" do
+  player = Player.new('black')
   mock_board = Board.new
   mock_board.grid.each_pair { |square, piece| mock_board.grid[square] = nil }
 
@@ -466,17 +476,20 @@ require './lib/required_files.rb'
   mock_board.grid[[0,4]] = piece
   mock_board.grid[[1,4]] = target
 
-  mock_selector = double('move_type_selector')
-  allow(mock_selector).to receive(:start) { [0,4] }
-  allow(mock_selector).to receive(:finish) { [1,3] }
-  allow(mock_selector).to receive(:output) {'EN_PASS'}
-  allow(mock_selector).to receive(:piece) {piece}
-  player = Player.new('black')
-  allow(mock_selector).to receive(:current_player) {player}
+  start = [0,4]
+  finish = [1,3]
+  mock_input = double('input')
+  allow(mock_input).to receive(:start) {start}
+  allow(mock_input).to receive(:finish) {finish}
+
+  mock_turn = double('turn')
+  allow(mock_turn).to receive(:board) {mock_board}
+  allow(mock_turn).to receive(:current_player) {player}
+  allow(mock_turn).to receive(:input) {mock_input}
   
-  move = EnPassMove.new(mock_selector, mock_board)
-  expect(move.start).to eql(mock_selector.start)
-  expect(move.finish).to eql(mock_selector.finish)
+  move = EnPassMove.new(mock_turn)
+  expect(move.start).to eql(start)
+  expect(move.finish).to eql(finish)
   expect(move.selected_piece).to eql(piece)
   expect(move.captured_piece).to eql(target)
   end
@@ -484,6 +497,7 @@ require './lib/required_files.rb'
  
  describe CastleMove do
   it "assigns correct start, finish, selected king and rook given a valid castle" do
+  player = Player.new('black')
   mock_board = Board.new
   mock_board.grid[[1,7]] = nil
   mock_board.grid[[2,7]] = nil
@@ -491,18 +505,22 @@ require './lib/required_files.rb'
   king = mock_board.get_piece([4,7])
   rook = mock_board.get_piece([0,7])
 
-  mock_selector = double('move_type_selector')
-  allow(mock_selector).to receive(:start) { [4,7] }
-  allow(mock_selector).to receive(:finish) { [2,7] }
-  allow(mock_selector).to receive(:output) {'CASTLE'}
-  allow(mock_selector).to receive(:piece) {king}
-  allow(mock_selector).to receive(:current_player) {Player.new('black')}
+  start = [4,7]
+  finish = [2,7]
+  mock_input = double('input')
+  allow(mock_input).to receive(:start) {start}
+  allow(mock_input).to receive(:finish) {finish}
+
+  mock_turn = double('turn')
+  allow(mock_turn).to receive(:board) {mock_board}
+  allow(mock_turn).to receive(:current_player) {player}
+  allow(mock_turn).to receive(:input) {mock_input}
   
-  move = CastleMove.new(mock_selector, mock_board)
+  move = CastleMove.new(mock_turn)
   expect(move.king).to eql(king)
   expect(move.rook).to eql(rook)
-  expect(move.start).to eql(mock_selector.start)
-  expect(move.finish).to eql(mock_selector.finish)
+  expect(move.start).to eql(start)
+  expect(move.finish).to eql(finish)
   end
  end
 
@@ -532,7 +550,7 @@ describe Move do
     expect(selector.piece).to eql(piece)
     expect(selector.output).to eql('STANDARD')
 
-    move = StandardMove.new(selector, mock_board)
+    move = StandardMove.new(mock_turn)
     expect(move.start).to eql(start)
     expect(move.finish).to eql(finish)
     expect(move.selected_piece).to eql(piece)
@@ -567,7 +585,7 @@ describe Move do
     expect(selector.piece).to eql(piece)
     expect(selector.output).to eql('CAPTURE')
 
-    move = CaptureMove.new(selector, mock_board)
+    move = CaptureMove.new(mock_turn)
     expect(move.start).to eql(start)
     expect(move.finish).to eql(finish)
     expect(move.selected_piece).to eql(piece)
@@ -606,7 +624,7 @@ describe Move do
     expect(selector.piece).to eql(piece)
     expect(selector.output).to eql('EN_PASS')
 
-    move = EnPassMove.new(selector, mock_board)
+    move = EnPassMove.new(mock_turn)
     expect(move.start).to eql(start)
     expect(move.finish).to eql(finish)
     expect(move.selected_piece).to eql(piece)
@@ -645,7 +663,7 @@ describe Move do
     expect(selector.is_castle?).to eql(true)
     expect(selector.output).to eql('CASTLE')
 
-    move = CastleMove.new(selector, mock_board)
+    move = CastleMove.new(mock_turn)
     expect(move.start).to eql(start)
     expect(move.finish).to eql(finish)
     expect(move.king).to eql(king)
@@ -673,7 +691,7 @@ describe Update do
       allow(mock_turn).to receive(:input) {mock_input}
 
       selector = MoveTypeSelector.new(mock_turn)
-      move = StandardMove.new(selector, mock_board)
+      move = StandardMove.new(mock_turn)
       temp_update = Update.new(move)
 
       temp_update.execute()
@@ -706,7 +724,7 @@ describe Update do
       allow(mock_turn).to receive(:input) {mock_input}
 
       selector = MoveTypeSelector.new(mock_turn)
-      move = CaptureMove.new(selector, mock_board)
+      move = CaptureMove.new(mock_turn)
       temp_update = Update.new(move)
 
       temp_update.execute()
@@ -741,7 +759,7 @@ describe Update do
       allow(mock_turn).to receive(:input) {mock_input}
 
       selector = MoveTypeSelector.new(mock_turn)
-      move = EnPassMove.new(selector, mock_board)
+      move = EnPassMove.new(mock_turn)
       temp_update = Update.new(move)
 
       temp_update.execute()
@@ -777,7 +795,7 @@ describe Update do
       allow(mock_turn).to receive(:input) {mock_input}
 
       selector = MoveTypeSelector.new(mock_turn)
-      move = CastleMove.new(selector, mock_board)
+      move = CastleMove.new(mock_turn)
       rook = move.rook
       rook_start = move.rook_start
       rook_finish = move.rook_finish
@@ -816,7 +834,7 @@ describe Update do
       allow(mock_turn).to receive(:input) {mock_input}
 
       selector = MoveTypeSelector.new(mock_turn)
-      move = StandardMove.new(selector, mock_board)
+      move = StandardMove.new(mock_turn)
       temp_update = Update.new(move)
 
       temp_update.execute()
@@ -851,7 +869,7 @@ describe Update do
       allow(mock_turn).to receive(:input) {mock_input}
 
       selector = MoveTypeSelector.new(mock_turn)
-      move = StandardMove.new(selector, mock_board)
+      move = StandardMove.new(mock_turn)
       temp_update = Update.new(move)
 
       temp_update.execute()
@@ -890,7 +908,7 @@ describe Update do
       move = nil
       temp_update = nil
       if selector.output == 'CASTLE'
-        move = CastleMove.new(selector, mock_board)
+        move = CastleMove.new(mock_turn)
         temp_update = Update.new(move)
       end
 
@@ -930,13 +948,13 @@ describe Update do
       selector_output = selector.output
       case selector_output
       when 'STANDARD'
-        move = StandardMove.new(selector, board)
+        move = StandardMove.new(turn)
       when 'CAPTURE'
-        move = CaptureMove.new(selector, board)
+        move = CaptureMove.new(turn)
       when 'EN_PASS'
-        move = EnPassMove.new(selector, board)
+        move = EnPassMove.new(turn)
       when 'CASTLE'
-        move = CastleMove.new(selector, board)
+        move = CastleMove.new(turn)
       else
         puts "selector error"
       end
