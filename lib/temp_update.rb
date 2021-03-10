@@ -35,11 +35,11 @@ class Update
     refresh_threats()
     king_location = get_king_location(@move.current_player.color)
 
-    king_under_threat = location_under_threat?(king_location)
+    king_under_threat = location_under_threat?(king_location, @move.current_player.color)
 
     castle_path_under_threat = false
     if @move.is_a?(CastleMove)
-      castle_path_under_threat = location_under_threat?(@move.rook_finish)
+      castle_path_under_threat = location_under_threat?(@move.rook_finish, @move.current_player.color)
     end
 
     if king_under_threat || castle_path_under_threat
@@ -49,10 +49,10 @@ class Update
     end
   end
 
-  def location_under_threat?(location)
+  def location_under_threat?(location, color)
     @board.grid.any? { |square, piece| 
       next if piece == nil
-      next if piece.color == @move.current_player.color
+      next if piece.color == color
       piece.reachable_locations.any?(location)
     }
   end
