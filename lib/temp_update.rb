@@ -33,7 +33,7 @@ class Update
 
   def valid?
     refresh_threats()
-    king_location = get_king_location()
+    king_location = get_king_location(@move.current_player.color)
 
     king_under_threat = location_under_threat?(king_location)
 
@@ -52,15 +52,16 @@ class Update
   def location_under_threat?(location)
     @board.grid.any? { |square, piece| 
       next if piece == nil
+      next if piece.color == @move.current_player.color
       piece.reachable_locations.any?(location)
     }
   end
 
-  def get_king_location
+  def get_king_location(color)
     @board.grid.each_pair { |square, piece|
       next if piece == nil
 
-      if ( piece.is_a?(King) && piece.color == @move.current_player.color )
+      if ( piece.is_a?(King) && piece.color == color )
         return square
       end
     }
