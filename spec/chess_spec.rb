@@ -869,10 +869,14 @@ describe Update do
   describe '#finalize' do
     it 'results in correctly updated board given a valid standard move' do
       game = Game.new()
-      board = game.board
-      puts ""
+      players = {
+        'white' => Player.new('white'),
+        'black' => Player.new('black')
+      }
+      board = Board.new()
+      game.board = board
+      game.players = players
       Graphics.print_board(board)
-      players = game.players
       turn_count = game.turn_count
       turn = Turn.new(turn_count, players)
       mock_input = double('input')
