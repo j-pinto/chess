@@ -30,4 +30,46 @@ class TemporaryUpdate
       @board.grid[@move.rook_start] = @move.rook
     end
   end
+
+  def valid?
+    refresh_threats()
+    king_location = get_king_location()
+
+    king_under_threat = location_under_threat?(king_location)
+
+    castle_path_under_threat = false
+    if @move.is_a?(CastleMove)
+      castle_path_under_threat = location_under_threat?(@move.rook_finish)
+    end
+
+    if king_under_threat || castle_path_under_threat
+      return false
+    else
+      return true
+    end
+  end
+
+  def location_under_threat?(location)
+    @board.grid.any? { |square, piece| 
+      next if piece == nil
+      piece.reachable_locations.any?(location)
+    }
+  end
+
+  def get_king_location
+    @board.grid.each_pair { |square, piece|
+      next if piece == nil
+
+      if ( piece.is_a?(King) && piece.color == @move.current_player.color )
+        return square
+      end
+    }
+  end
+
+  def refresh_threats
+    @board.grid.each_value { |piece|
+      next if piece == nil
+      piece.update_reachable_locations(@board) 
+    }
+  end
 end
