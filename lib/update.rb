@@ -17,7 +17,7 @@ class Update
       @board.grid[@move.rook_start] = nil
     end
 
-    refresh_threats()
+    refresh_piece_data()
   end
 
   def revert
@@ -33,7 +33,7 @@ class Update
       @board.grid[@move.rook_start] = @move.rook
     end
 
-    refresh_threats()
+    refresh_piece_data()
   end
 
   def valid?
@@ -92,12 +92,7 @@ class Update
     }
   end
 
-  def refresh_threats
-    @board.grid.each_pair { |square, piece|
-      next if piece = nil
-
-    }
-
+  def refresh_piece_data
     @board.grid.each_pair { |square, piece|
       next if piece == nil
       piece.location = square
