@@ -631,7 +631,7 @@ describe Move do
   end
 end
 
-describe TemporaryUpdate do
+describe Update do
   describe '#execute' do
     it 'execute() updates board according to standard move data, revert() undoes change' do
       mock_board = Board.new()
@@ -650,7 +650,7 @@ describe TemporaryUpdate do
 
       selector = MoveTypeSelector.new(mock_turn, mock_input, mock_board)
       move = StandardMove.new(selector, mock_board)
-      temp_update = TemporaryUpdate.new(move)
+      temp_update = Update.new(move)
 
       temp_update.execute()
       expect(temp_update.board.get_piece(finish)).to eql(piece)
@@ -681,7 +681,7 @@ describe TemporaryUpdate do
 
       selector = MoveTypeSelector.new(mock_turn, mock_input, mock_board)
       move = CaptureMove.new(selector, mock_board)
-      temp_update = TemporaryUpdate.new(move)
+      temp_update = Update.new(move)
 
       temp_update.execute()
       expect(temp_update.board.get_piece(finish)).to eql(piece)
@@ -714,7 +714,7 @@ describe TemporaryUpdate do
 
       selector = MoveTypeSelector.new(mock_turn, mock_input, mock_board)
       move = EnPassMove.new(selector, mock_board)
-      temp_update = TemporaryUpdate.new(move)
+      temp_update = Update.new(move)
 
       temp_update.execute()
       expect(temp_update.board.get_piece(finish)).to eql(piece)
@@ -751,7 +751,7 @@ describe TemporaryUpdate do
       rook = move.rook
       rook_start = move.rook_start
       rook_finish = move.rook_finish
-      temp_update = TemporaryUpdate.new(move)
+      temp_update = Update.new(move)
 
       temp_update.execute()
       expect(temp_update.board.get_piece(finish)).to eql(king)
@@ -785,7 +785,7 @@ describe TemporaryUpdate do
 
       selector = MoveTypeSelector.new(mock_turn, mock_input, mock_board)
       move = StandardMove.new(selector, mock_board)
-      temp_update = TemporaryUpdate.new(move)
+      temp_update = Update.new(move)
 
       temp_update.execute()
       expect(temp_update.board.get_piece(finish)).to eql(piece)
@@ -818,7 +818,7 @@ describe TemporaryUpdate do
 
       selector = MoveTypeSelector.new(mock_turn, mock_input, mock_board)
       move = StandardMove.new(selector, mock_board)
-      temp_update = TemporaryUpdate.new(move)
+      temp_update = Update.new(move)
 
       temp_update.execute()
       expect(temp_update.board.get_piece(finish)).to eql(piece)
@@ -855,7 +855,7 @@ describe TemporaryUpdate do
       temp_update = nil
       if selector.output == 'CASTLE'
         move = CastleMove.new(selector, mock_board)
-        temp_update = TemporaryUpdate.new(move)
+        temp_update = Update.new(move)
       end
 
       temp_update.execute()

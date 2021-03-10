@@ -1,4 +1,4 @@
-class TemporaryUpdate
+class Update
   attr_reader :move, :board, :captured_piece
   def initialize(move)
     @move = move
