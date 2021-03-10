@@ -877,8 +877,8 @@ describe Update do
       game.board = board
       game.players = players
       Graphics.print_board(board)
-      turn_count = game.turn_count
-      turn = Turn.new(turn_count, players)
+
+      turn = Turn.new(game)
       mock_input = double('input')
       start = [0,1]
       finish = [0,2]

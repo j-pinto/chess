@@ -1,19 +1,19 @@
 class Turn
   attr_reader :current_player, :enemy_player
-  def initialize(turn_count, players)
+  def initialize(game)
     @current_player = nil
     @enemy_player = nil
-    assign_players(turn_count, players)
+    assign_players(game)
     prompt()
   end
 
-  def assign_players(turn_count, players)
-    if turn_count.even?
-      @current_player = players['white']
-      @enemy_player = players['black']
+  def assign_players(game)
+    if game.turn_count.even?
+      @current_player = game.players['white']
+      @enemy_player = game.players['black']
     else
-      @current_player = players['black']
-      @enemy_player = players['white']
+      @current_player = game.players['black']
+      @enemy_player = game.players['white']
     end
   end
 
