@@ -57,11 +57,7 @@ class Update
     en_pass_status_reset()
     check_status_reset()
     move_status_update()
-
-    if ( @move.is_a?(CaptureMove) || @move.is_a?(EnPassMove) )
-      @captured_piece = @move.captured_piece
-    end
-
+    capture_status_update()
     enemy_king_in_check?()
   end
 
@@ -127,6 +123,12 @@ class Update
 
     if @move.is_a?(CastleMove)
       @move.rook.has_moved = true
+    end
+  end
+
+  def capture_status_update
+    if ( @move.is_a?(CaptureMove) || @move.is_a?(EnPassMove) )
+      @captured_piece = @move.captured_piece
     end
   end
 end
