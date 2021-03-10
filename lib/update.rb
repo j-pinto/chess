@@ -72,7 +72,12 @@ class Update
     @board.grid.any? { |square, piece| 
       next if piece == nil
       next if piece.color == color
-      piece.reachable_locations.any?(location)
+
+      if piece.is_a?(Pawn)
+        piece.reachable_captures.any?(location)
+      else
+        piece.reachable_locations.any?(location)
+      end
     }
   end
 
