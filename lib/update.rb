@@ -3,6 +3,7 @@ class Update
   def initialize(move)
     @move = move
     @board = move.board
+    @captured_piece = nil
   end
 
   def execute
@@ -29,6 +30,8 @@ class Update
       @board.grid[@move.rook_finish] = nil
       @board.grid[@move.rook_start] = @move.rook
     end
+
+    refresh_threats()
   end
 
   def valid?
@@ -47,6 +50,22 @@ class Update
     else
       return true
     end
+  end
+
+  def finalize
+    en_pass_status_reset()
+    check_status_reset()
+    @move.selected_piece.has_moved = true
+
+    if @move.is_a?(CastleMove)
+      @move.rook.has_moved = true
+    end
+
+    if ( @move.is_a?(CaptureMove) || @move.is_a?(EnPassMove) )
+      @captured_piece = @move.captured_piece
+    end
+
+    enemy_king_in_check?()
   end
 
   def location_under_threat?(location, color)
@@ -71,6 +90,32 @@ class Update
     @board.grid.each_value { |piece|
       next if piece == nil
       piece.update_reachable_locations(@board) 
+    }
+  end
+
+  def enemy_king_in_check(current_player_color)
+    enemy_color = nil
+    @move.current_player.color == white ? enemy_color = 'black' : enemy_color = 'white'
+
+    enemy_king_location = get_king_location(enemy_color)
+    enemy_king_under_threat = location_under_threat?(enemy_king_location, enemy_color)
+    if enemy_king_under_threat
+      @board.grid[enemy_king_location].in_check = true
+    end
+  end
+
+  def check_status_reset
+    king_location = get_king_location(@move.current_player.color)
+    @board.grid[king_location].in_check = false
+  end
+
+  def en_pass_status_reset
+    @board.grid.each_pair { |square, piece|
+      next if piece == nil
+      next if piece == @move.current_player.color
+      if piece.is_a?(Pawn)
+        piece.en_pass_vulnerable = false
+      end
     }
   end
 end
