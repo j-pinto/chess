@@ -41,6 +41,7 @@ class King < Piece
     return false if partner.has_moved
 
     return false unless self.location == [4, rank]
+    return false unless self.in_check == false
     return false if self.has_moved
 
     return true
@@ -58,6 +59,7 @@ class King < Piece
     return false if partner.has_moved
 
     return false unless self.location == [4, rank]
+    return false unless self.in_check == false
     return false if self.has_moved
 
     return true
