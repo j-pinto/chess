@@ -404,6 +404,9 @@ require './lib/required_files.rb'
   allow(mock_selector).to receive(:output) {'STANDARD'}
   piece = mock_board.get_piece([0,1])
   allow(mock_selector).to receive(:piece) {piece}
+  player = Player.new('white')
+  allow(mock_selector).to receive(:current_player) {player}
+
 
   move = StandardMove.new(mock_selector, mock_board)
   expect(move.selected_piece).to eql(piece)
@@ -427,6 +430,8 @@ require './lib/required_files.rb'
   allow(mock_selector).to receive(:finish) { [5,5] }
   allow(mock_selector).to receive(:output) {'CAPTURE'}
   allow(mock_selector).to receive(:piece) {piece}
+  player = Player.new('black')
+  allow(mock_selector).to receive(:current_player) {player}
   
   move = CaptureMove.new(mock_selector, mock_board)
   expect(move.selected_piece).to eql(piece)
@@ -452,6 +457,8 @@ require './lib/required_files.rb'
   allow(mock_selector).to receive(:finish) { [1,3] }
   allow(mock_selector).to receive(:output) {'EN_PASS'}
   allow(mock_selector).to receive(:piece) {piece}
+  player = Player.new('black')
+  allow(mock_selector).to receive(:current_player) {player}
   
   move = EnPassMove.new(mock_selector, mock_board)
   expect(move.start).to eql(mock_selector.start)
@@ -756,5 +763,102 @@ describe TemporaryUpdate do
     expect(temp_update.board.get_piece(start)).to eql(king)
     expect(temp_update.board.get_piece(rook_start)).to eql(rook)
     expect(temp_update.board.get_piece(rook_finish)).to eql(nil)
+  end
+
+  it 'valid?() returns true if move would not result in players own king being in check' do
+    mock_board = Board.new()
+    player = Player.new('white')
+    start = [0,1]
+    finish = [0,2]
+    piece = mock_board.get_piece(start)
+    piece.update_reachable_locations(mock_board)
+
+    mock_turn = double('turn')
+    allow(mock_turn).to receive(:current_player) { player }
+    
+    mock_input = double('input')
+    allow(mock_input).to receive(:start) { start }
+    allow(mock_input).to receive(:finish) { finish }
+
+    selector = MoveTypeSelector.new(mock_turn, mock_input, mock_board)
+    move = StandardMove.new(selector, mock_board)
+    temp_update = TemporaryUpdate.new(move)
+
+    temp_update.execute()
+    expect(temp_update.board.get_piece(finish)).to eql(piece)
+    expect(temp_update.board.get_piece(start)).to eql(nil)
+
+    expect(temp_update.valid?()).to eql(true)
+  end
+
+  it 'valid?() returns false if move would result in players own king being in check' do
+    player = Player.new('white')
+    mock_board = Board.new()
+    mock_board.grid.each_pair { |square, piece| mock_board.grid[square] = nil }
+    start = [0,1]
+    finish = [1,1]
+    piece = Rook.new('white', [0,1])
+    king = King.new('white', [0,0])
+    threat = Queen.new('black', [0,7])
+    mock_board.grid[start] = piece
+    mock_board.grid[[0,0]] = king
+    mock_board.grid[[0,7]] = threat
+
+    piece.update_reachable_locations(mock_board)
+
+    mock_turn = double('turn')
+    allow(mock_turn).to receive(:current_player) { player }
+    
+    mock_input = double('input')
+    allow(mock_input).to receive(:start) { start }
+    allow(mock_input).to receive(:finish) { finish }
+
+    selector = MoveTypeSelector.new(mock_turn, mock_input, mock_board)
+    move = StandardMove.new(selector, mock_board)
+    temp_update = TemporaryUpdate.new(move)
+
+    temp_update.execute()
+    expect(temp_update.board.get_piece(finish)).to eql(piece)
+    expect(temp_update.board.get_piece(start)).to eql(nil)
+
+    expect(temp_update.valid?()).to eql(false)
+  end
+
+  it 'valid?() returns false if king passes through threatened square during castle' do
+    player = Player.new('white')
+    mock_board = Board.new()
+    mock_board.grid.each_pair { |square, piece| mock_board.grid[square] = nil }
+    start = [4,0]
+    finish = [2,0]
+    rook = Rook.new('white', [0,0])
+    king = King.new('white', start)
+    threat = Queen.new('black', [3,7])
+    mock_board.grid[start] = king
+    mock_board.grid[[0,0]] = rook
+    mock_board.grid[[3,7]] = threat
+
+    king.update_reachable_locations(mock_board)
+
+    mock_turn = double('turn')
+    allow(mock_turn).to receive(:current_player) { player }
+
+    mock_input = double('input')
+    allow(mock_input).to receive(:start) { start }
+    allow(mock_input).to receive(:finish) { finish }
+
+    selector = MoveTypeSelector.new(mock_turn, mock_input, mock_board)
+    selector.set_output()
+    move = nil
+    temp_update = nil
+    if selector.output == 'CASTLE'
+      move = CastleMove.new(selector, mock_board)
+      temp_update = TemporaryUpdate.new(move)
+    end
+
+    temp_update.execute()
+    expect(temp_update.board.get_piece(finish)).to eql(king)
+    expect(temp_update.board.get_piece(start)).to eql(nil)
+
+    expect(temp_update.valid?()).to eql(false)
   end
 end
