@@ -4,13 +4,14 @@ class CastleMove < Move
     super
     @player_color = move_type_selector.current_player.color
     @king = move_type_selector.piece
-    @rook_data = assign_rook()
+    @rook_data = get_rook_data()
     @rook = @rook_data['rook']
     @rook_start = @rook_data['rook_start']
     @rook_finish = @rook_data['rook_finish']
+    @castle_path = @rook_data['rook_finish']
   end
 
-  def assign_rook()
+  def get_rook_data()
     rook_location = nil
     rook_finish = nil
     rank = nil
