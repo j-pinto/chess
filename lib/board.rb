@@ -5,7 +5,7 @@ class Board
     @pieces = make_pieces()
     @grid = make_grid()
     populate()
-    update_piece_data()
+    refresh_piece_data()
   end
 
   public
@@ -57,13 +57,15 @@ class Board
     return true
   end
 
-  private
-
-  def update_piece_data
-    @pieces.each { |piece|
+  def refresh_piece_data
+    @grid.each_pair { |square, piece|
+      next if piece == nil
+      piece.location = square
       piece.update_reachable_locations(self)
     }
   end
+
+  private
 
   def populate
     @pieces.each do |piece|

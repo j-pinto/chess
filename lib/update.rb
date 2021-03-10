@@ -17,7 +17,7 @@ class Update
       @board.grid[@move.rook_start] = nil
     end
 
-    refresh_piece_data()
+    @board.refresh_piece_data()
   end
 
   def revert
@@ -33,7 +33,7 @@ class Update
       @board.grid[@move.rook_start] = @move.rook
     end
 
-    refresh_piece_data()
+    @board.refresh_piece_data()
   end
 
   def valid?
@@ -81,14 +81,6 @@ class Update
       if ( piece.is_a?(King) && piece.color == color )
         return square
       end
-    }
-  end
-
-  def refresh_piece_data
-    @board.grid.each_pair { |square, piece|
-      next if piece == nil
-      piece.location = square
-      piece.update_reachable_locations(@board) 
     }
   end
 
