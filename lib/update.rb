@@ -16,6 +16,8 @@ class Update
       @board.grid[@move.rook_finish] = @move.rook
       @board.grid[@move.rook_start] = nil
     end
+
+    refresh_threats()
   end
 
   def revert
@@ -35,7 +37,6 @@ class Update
   end
 
   def valid?
-    refresh_threats()
     king_location = get_king_location(@move.current_player.color)
 
     king_under_threat = location_under_threat?(king_location, @move.current_player.color)
@@ -92,8 +93,14 @@ class Update
   end
 
   def refresh_threats
-    @board.grid.each_value { |piece|
+    @board.grid.each_pair { |square, piece|
+      next if piece = nil
+
+    }
+
+    @board.grid.each_pair { |square, piece|
       next if piece == nil
+      piece.location = square
       piece.update_reachable_locations(@board) 
     }
   end

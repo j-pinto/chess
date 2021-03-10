@@ -1,6 +1,6 @@
 class Piece
-  attr_reader :location, :color, :moveset, :unicode, :reachable_locations
-  attr_accessor :has_moved
+  attr_reader :color, :moveset, :unicode, :reachable_locations
+  attr_accessor :has_moved, :location
 
   def initialize(color, initial_location)
     @color = color
