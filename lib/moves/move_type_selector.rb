@@ -1,11 +1,11 @@
 class MoveTypeSelector
   attr_reader :start, :finish, :current_player, :piece, :output
-  def initialize(turn, input, board)
-    @board = board
-    @start = input.start
-    @finish = input.finish
+  def initialize(turn)
+    @board = turn.board
+    @start = turn.input.start
+    @finish = turn.input.finish
     @current_player = turn.current_player
-    @piece = board.get_piece(@start)
+    @piece = @board.get_piece(@start)
     @output = nil
   end
 

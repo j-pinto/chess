@@ -259,15 +259,19 @@ require './lib/required_files.rb'
       mock_turn = double('turn')
       mock_player = Player.new('white')
       allow(mock_turn).to receive(:current_player) {mock_player}
+      allow(mock_turn).to receive(:board) {mock_board}
+      allow(mock_turn).to receive(:input) {mock_input}
 
       mock_turn2 = double('turn')
       mock_player2 = Player.new('black')
       allow(mock_turn2).to receive(:current_player) {mock_player2}
+      allow(mock_turn2).to receive(:board) {mock_board}
+      allow(mock_turn2).to receive(:input) {mock_input}
 
-      move_type_selector = MoveTypeSelector.new(mock_turn, mock_input, mock_board)
+      move_type_selector = MoveTypeSelector.new(mock_turn)
       expect(move_type_selector.start_valid?).to eql(true)
 
-      move_type_selector = MoveTypeSelector.new(mock_turn2, mock_input, mock_board)
+      move_type_selector = MoveTypeSelector.new(mock_turn2)
       expect(move_type_selector.start_valid?).to eql(false)
     end
   end
@@ -287,15 +291,18 @@ require './lib/required_files.rb'
       mock_turn = double('turn')
       mock_player = Player.new('white')
       allow(mock_turn).to receive(:current_player) {mock_player}
+      allow(mock_turn).to receive(:board) {mock_board}
+      allow(mock_turn).to receive(:input) {mock_input}
   
-      move_type_selector = MoveTypeSelector.new(mock_turn, mock_input, mock_board)
+      move_type_selector = MoveTypeSelector.new(mock_turn)
       expect(move_type_selector.start_valid?).to eql(true)
       expect(move_type_selector.is_castle?).to eql(true)
       move_type_selector.set_output()
       expect(move_type_selector.output).to eql('CASTLE')
   
       mock_board2 = Board.new
-      move_type_selector = MoveTypeSelector.new(mock_turn, mock_input, mock_board2)
+      allow(mock_turn).to receive(:board) {mock_board2}
+      move_type_selector = MoveTypeSelector.new(mock_turn)
       expect(move_type_selector.start_valid?).to eql(true)
       expect(move_type_selector.is_castle?).to eql(false)
       move_type_selector.set_output()
@@ -322,9 +329,11 @@ require './lib/required_files.rb'
       mock_turn = double('turn')
       mock_player = Player.new('white')
       allow(mock_turn).to receive(:current_player) {mock_player}
+      allow(mock_turn).to receive(:board) {mock_board}
+      allow(mock_turn).to receive(:input) {mock_input}
 
       white_pawn.update_reachable_captures(mock_board)
-      move_type_selector = MoveTypeSelector.new(mock_turn, mock_input, mock_board)
+      move_type_selector = MoveTypeSelector.new(mock_turn)
       expect(move_type_selector.start_valid?).to eql(true)
       expect(move_type_selector.is_en_pass?).to eql(true)
       move_type_selector.set_output()
@@ -350,9 +359,11 @@ require './lib/required_files.rb'
       mock_turn = double('turn')
       mock_player = Player.new('white')
       allow(mock_turn).to receive(:current_player) {mock_player}
+      allow(mock_turn).to receive(:board) {mock_board}
+      allow(mock_turn).to receive(:input) {mock_input}
 
       knight.update_reachable_locations(mock_board)
-      move_type_selector = MoveTypeSelector.new(mock_turn, mock_input, mock_board)
+      move_type_selector = MoveTypeSelector.new(mock_turn)
       expect(move_type_selector.start_valid?).to eql(true)
       expect(move_type_selector.is_capture?).to eql(true)
       move_type_selector.set_output()
@@ -372,9 +383,11 @@ require './lib/required_files.rb'
       mock_turn = double('turn')
       mock_player = Player.new('black')
       allow(mock_turn).to receive(:current_player) {mock_player}
+      allow(mock_turn).to receive(:board) {mock_board}
+      allow(mock_turn).to receive(:input) {mock_input}
 
       mock_board.grid[[0,7]].update_reachable_locations(mock_board)
-      move_type_selector = MoveTypeSelector.new(mock_turn, mock_input, mock_board)
+      move_type_selector = MoveTypeSelector.new(mock_turn)
       expect(move_type_selector.start_valid?).to eql(true)
       expect(move_type_selector.is_standard?).to eql(true)
       move_type_selector.set_output()
@@ -383,8 +396,9 @@ require './lib/required_files.rb'
       mock_input2 = double('input')
       allow(mock_input2).to receive(:start) {[0,7]}
       allow(mock_input2).to receive(:finish) {[1,3]}
+      allow(mock_turn).to receive(:input) {mock_input2}
 
-      move_type_selector = MoveTypeSelector.new(mock_turn, mock_input2, mock_board)
+      move_type_selector = MoveTypeSelector.new(mock_turn)
       expect(move_type_selector.start_valid?).to eql(true)
       expect(move_type_selector.is_standard?).to eql(false)
       move_type_selector.set_output()
@@ -501,15 +515,17 @@ describe Move do
     piece = mock_board.get_piece(start)
     piece.update_reachable_locations(mock_board)
 
-    mock_turn = double('turn')
-    allow(mock_turn).to receive(:current_player) { Player.new('white') }
-
     mock_input = double('input')
     allow(mock_input).to receive(:start) { start }
     allow(mock_input).to receive(:finish) { finish }
 
+    mock_turn = double('turn')
+    allow(mock_turn).to receive(:current_player) { Player.new('white') }
+    allow(mock_turn).to receive(:board) {mock_board}
+    allow(mock_turn).to receive(:input) {mock_input}
+
     move = nil
-    selector = MoveTypeSelector.new(mock_turn, mock_input, mock_board)
+    selector = MoveTypeSelector.new(mock_turn)
     expect(selector.start).to eql(start)
     expect(selector.finish).to eql(finish)
     selector.set_output()
@@ -534,15 +550,17 @@ describe Move do
     target = mock_board.get_piece(finish)
     piece.update_reachable_locations(mock_board)
 
-    mock_turn = double('turn')
-    allow(mock_turn).to receive(:current_player) { Player.new('black') }
-
     mock_input = double('input')
     allow(mock_input).to receive(:start) { start }
     allow(mock_input).to receive(:finish) { finish }
 
+    mock_turn = double('turn')
+    allow(mock_turn).to receive(:current_player) { Player.new('black') }
+    allow(mock_turn).to receive(:board) {mock_board}
+    allow(mock_turn).to receive(:input) {mock_input}
+
     move = nil
-    selector = MoveTypeSelector.new(mock_turn, mock_input, mock_board)
+    selector = MoveTypeSelector.new(mock_turn)
     expect(selector.start).to eql(start)
     expect(selector.finish).to eql(finish)
     selector.set_output()
@@ -571,15 +589,17 @@ describe Move do
     target.en_pass_vulnerable = true
     piece.update_reachable_locations(mock_board)
 
-    mock_turn = double('turn')
-    allow(mock_turn).to receive(:current_player) { Player.new('black') }
-
     mock_input = double('input')
     allow(mock_input).to receive(:start) { start }
     allow(mock_input).to receive(:finish) { finish }
 
+    mock_turn = double('turn')
+    allow(mock_turn).to receive(:current_player) { Player.new('black') }
+    allow(mock_turn).to receive(:board) {mock_board}
+    allow(mock_turn).to receive(:input) {mock_input}
+
     move = nil
-    selector = MoveTypeSelector.new(mock_turn, mock_input, mock_board)
+    selector = MoveTypeSelector.new(mock_turn)
     expect(selector.start).to eql(start)
     expect(selector.finish).to eql(finish)
     selector.set_output()
@@ -606,15 +626,17 @@ describe Move do
     rook = mock_board.get_piece([0,7])
     king.update_reachable_locations(mock_board)
 
-    mock_turn = double('turn')
-    player = Player.new('black')
-    allow(mock_turn).to receive(:current_player) { player }
-
     mock_input = double('input')
     allow(mock_input).to receive(:start) { start }
     allow(mock_input).to receive(:finish) { finish }
 
-    selector = MoveTypeSelector.new(mock_turn, mock_input, mock_board)
+    mock_turn = double('turn')
+    player = Player.new('black')
+    allow(mock_turn).to receive(:current_player) { player }
+    allow(mock_turn).to receive(:board) {mock_board}
+    allow(mock_turn).to receive(:input) {mock_input}
+
+    selector = MoveTypeSelector.new(mock_turn)
     expect(selector.start).to eql(start)
     expect(selector.finish).to eql(finish)
     expect(selector.piece).to eql(king)
@@ -641,14 +663,16 @@ describe Update do
       piece = mock_board.get_piece(start)
       piece.update_reachable_locations(mock_board)
 
-      mock_turn = double('turn')
-      allow(mock_turn).to receive(:current_player) { player }
-
       mock_input = double('input')
       allow(mock_input).to receive(:start) { start }
       allow(mock_input).to receive(:finish) { finish }
 
-      selector = MoveTypeSelector.new(mock_turn, mock_input, mock_board)
+      mock_turn = double('turn')
+      allow(mock_turn).to receive(:current_player) { player }
+      allow(mock_turn).to receive(:board) {mock_board}
+      allow(mock_turn).to receive(:input) {mock_input}
+
+      selector = MoveTypeSelector.new(mock_turn)
       move = StandardMove.new(selector, mock_board)
       temp_update = Update.new(move)
 
@@ -672,14 +696,16 @@ describe Update do
       finish = [5,5]
       piece.update_reachable_locations(mock_board)
 
-      mock_turn = double('turn')
-      allow(mock_turn).to receive(:current_player) { player }
-
       mock_input = double('input')
       allow(mock_input).to receive(:start) { start }
       allow(mock_input).to receive(:finish) { finish }
 
-      selector = MoveTypeSelector.new(mock_turn, mock_input, mock_board)
+      mock_turn = double('turn')
+      allow(mock_turn).to receive(:current_player) { player }
+      allow(mock_turn).to receive(:board) {mock_board}
+      allow(mock_turn).to receive(:input) {mock_input}
+
+      selector = MoveTypeSelector.new(mock_turn)
       move = CaptureMove.new(selector, mock_board)
       temp_update = Update.new(move)
 
@@ -705,14 +731,16 @@ describe Update do
       target.en_pass_vulnerable = true
       piece.update_reachable_locations(mock_board)
 
-      mock_turn = double('turn')
-      allow(mock_turn).to receive(:current_player) { player }
-
       mock_input = double('input')
       allow(mock_input).to receive(:start) { start }
       allow(mock_input).to receive(:finish) { finish }
 
-      selector = MoveTypeSelector.new(mock_turn, mock_input, mock_board)
+      mock_turn = double('turn')
+      allow(mock_turn).to receive(:current_player) { player }
+      allow(mock_turn).to receive(:board) {mock_board}
+      allow(mock_turn).to receive(:input) {mock_input}
+
+      selector = MoveTypeSelector.new(mock_turn)
       move = EnPassMove.new(selector, mock_board)
       temp_update = Update.new(move)
 
@@ -739,14 +767,16 @@ describe Update do
       king = mock_board.get_piece(start)
       king.update_reachable_locations(mock_board)
 
-      mock_turn = double('turn')
-      allow(mock_turn).to receive(:current_player) { player }
-
       mock_input = double('input')
       allow(mock_input).to receive(:start) { start }
       allow(mock_input).to receive(:finish) { finish }
 
-      selector = MoveTypeSelector.new(mock_turn, mock_input, mock_board)
+      mock_turn = double('turn')
+      allow(mock_turn).to receive(:current_player) { player }
+      allow(mock_turn).to receive(:board) {mock_board}
+      allow(mock_turn).to receive(:input) {mock_input}
+
+      selector = MoveTypeSelector.new(mock_turn)
       move = CastleMove.new(selector, mock_board)
       rook = move.rook
       rook_start = move.rook_start
@@ -776,14 +806,16 @@ describe Update do
       piece = mock_board.get_piece(start)
       piece.update_reachable_locations(mock_board)
 
-      mock_turn = double('turn')
-      allow(mock_turn).to receive(:current_player) { player }
-
       mock_input = double('input')
       allow(mock_input).to receive(:start) { start }
       allow(mock_input).to receive(:finish) { finish }
 
-      selector = MoveTypeSelector.new(mock_turn, mock_input, mock_board)
+      mock_turn = double('turn')
+      allow(mock_turn).to receive(:current_player) { player }
+      allow(mock_turn).to receive(:board) {mock_board}
+      allow(mock_turn).to receive(:input) {mock_input}
+
+      selector = MoveTypeSelector.new(mock_turn)
       move = StandardMove.new(selector, mock_board)
       temp_update = Update.new(move)
 
@@ -809,14 +841,16 @@ describe Update do
 
       piece.update_reachable_locations(mock_board)
 
-      mock_turn = double('turn')
-      allow(mock_turn).to receive(:current_player) { player }
-
       mock_input = double('input')
       allow(mock_input).to receive(:start) { start }
       allow(mock_input).to receive(:finish) { finish }
 
-      selector = MoveTypeSelector.new(mock_turn, mock_input, mock_board)
+      mock_turn = double('turn')
+      allow(mock_turn).to receive(:current_player) { player }
+      allow(mock_turn).to receive(:board) {mock_board}
+      allow(mock_turn).to receive(:input) {mock_input}
+
+      selector = MoveTypeSelector.new(mock_turn)
       move = StandardMove.new(selector, mock_board)
       temp_update = Update.new(move)
 
@@ -842,14 +876,16 @@ describe Update do
 
       king.update_reachable_locations(mock_board)
 
-      mock_turn = double('turn')
-      allow(mock_turn).to receive(:current_player) { player }
-
       mock_input = double('input')
       allow(mock_input).to receive(:start) { start }
       allow(mock_input).to receive(:finish) { finish }
 
-      selector = MoveTypeSelector.new(mock_turn, mock_input, mock_board)
+      mock_turn = double('turn')
+      allow(mock_turn).to receive(:current_player) { player }
+      allow(mock_turn).to receive(:board) {mock_board}
+      allow(mock_turn).to receive(:input) {mock_input}
+
+      selector = MoveTypeSelector.new(mock_turn)
       selector.set_output()
       move = nil
       temp_update = nil
@@ -876,15 +912,20 @@ describe Update do
       board = Board.new()
       game.board = board
       game.players = players
+
+      puts ""
       Graphics.print_board(board)
 
-      turn = Turn.new(game)
       mock_input = double('input')
       start = [0,1]
       finish = [0,2]
       allow(mock_input).to receive(:start) {start}
       allow(mock_input).to receive(:finish) {finish}
-      selector = MoveTypeSelector.new(turn, mock_input, board)
+
+      turn = Turn.new(game)
+      turn.input = mock_input
+      
+      selector = MoveTypeSelector.new(turn)
       selector.set_output()
       selector_output = selector.output
       case selector_output

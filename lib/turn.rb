@@ -1,10 +1,14 @@
 class Turn
-  attr_reader :current_player, :enemy_player
+  attr_accessor :input
+  attr_reader :board, :current_player, :enemy_player
   def initialize(game)
+    @board = game.board
     @current_player = nil
     @enemy_player = nil
     assign_players(game)
     prompt()
+    
+    @input = nil
   end
 
   def assign_players(game)
