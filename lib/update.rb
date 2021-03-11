@@ -65,10 +65,10 @@ class Update
     en_pass_status_update()
     move_status_update()
     capture_status_update()
-    enemy_king_in_check?()
+    enemy_king_check_scan()
   end
 
-  def enemy_king_in_check?
+  def enemy_king_check_scan
     enemy_color = nil
     @move.current_player.color == 'white' ? enemy_color = 'black' : enemy_color = 'white'
 
