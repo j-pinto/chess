@@ -54,8 +54,8 @@ class Update
   end
 
   def finalize
-    en_pass_status_reset()
     check_status_reset()
+    en_pass_status_update()
     move_status_update()
     capture_status_update()
     enemy_king_in_check?()
@@ -100,7 +100,14 @@ class Update
     @board.grid[king_location].in_check = false
   end
 
-  def en_pass_status_reset
+  def en_pass_status_update
+    if @move.selected_piece.is_a?(Pawn)
+      delta_y = ( @move.start[1] - @move.finish[1] ).abs()
+      if delta_y == 2
+        @move.selected_piece.en_pass_vulnerable = true
+      end
+    end
+
     @board.grid.each_pair { |square, piece|
       next if piece == nil
       next if piece == @move.current_player.color
