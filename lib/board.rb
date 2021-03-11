@@ -57,6 +57,29 @@ class Board
     return true
   end
 
+  def location_under_threat?(location, color)
+    @grid.any? { |square, piece| 
+      next if piece == nil
+      next if piece.color == color
+
+      if piece.is_a?(Pawn)
+        piece.reachable_captures.any?(location)
+      else
+        piece.reachable_locations.any?(location)
+      end
+    }
+  end
+
+  def get_king_location(color)
+    @grid.each_pair { |square, piece|
+      next if piece == nil
+
+      if ( piece.is_a?(King) && piece.color == color )
+        return square
+      end
+    }
+  end
+
   def refresh_piece_data
     @grid.each_pair { |square, piece|
       next if piece == nil

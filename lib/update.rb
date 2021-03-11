@@ -37,13 +37,14 @@ class Update
   end
 
   def valid?
-    king_location = get_king_location(@move.current_player.color)
-
-    king_under_threat = location_under_threat?(king_location, @move.current_player.color)
+    color = @move.current_player.color
+    king_location = @board.get_king_location(color)
+    king_under_threat = @board.location_under_threat?(king_location, color)
 
     castle_path_under_threat = false
     if @move.is_a?(CastleMove)
-      castle_path_under_threat = location_under_threat?(@move.rook_finish, @move.current_player.color)
+      color = @move.current_player.color
+      castle_path_under_threat = @board.location_under_threat?(@move.rook_finish, color)
     end
 
     if king_under_threat || castle_path_under_threat
@@ -61,42 +62,20 @@ class Update
     enemy_king_in_check?()
   end
 
-  def location_under_threat?(location, color)
-    @board.grid.any? { |square, piece| 
-      next if piece == nil
-      next if piece.color == color
-
-      if piece.is_a?(Pawn)
-        piece.reachable_captures.any?(location)
-      else
-        piece.reachable_locations.any?(location)
-      end
-    }
-  end
-
-  def get_king_location(color)
-    @board.grid.each_pair { |square, piece|
-      next if piece == nil
-
-      if ( piece.is_a?(King) && piece.color == color )
-        return square
-      end
-    }
-  end
-
   def enemy_king_in_check?
     enemy_color = nil
     @move.current_player.color == 'white' ? enemy_color = 'black' : enemy_color = 'white'
 
-    enemy_king_location = get_king_location(enemy_color)
-    enemy_king_under_threat = location_under_threat?(enemy_king_location, enemy_color)
+    enemy_king_location = @board.get_king_location(enemy_color)
+    enemy_king_under_threat = @board.location_under_threat?(enemy_king_location, enemy_color)
     if enemy_king_under_threat
       @board.grid[enemy_king_location].in_check = true
     end
   end
 
   def check_status_reset
-    king_location = get_king_location(@move.current_player.color)
+    color = @move.current_player.color
+    king_location = @board.get_king_location(color)
     @board.grid[king_location].in_check = false
   end
 
