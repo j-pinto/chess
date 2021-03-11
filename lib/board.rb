@@ -57,17 +57,29 @@ class Board
     return true
   end
 
-  def location_under_threat?(location, color)
-    @grid.any? { |square, piece| 
+  def threat?(location, color, result_type:'bool')
+    bool_result = false
+    piece_result = nil
+    @grid.each_pair { |square, piece| 
       next if piece == nil
       next if piece.color == color
-
       if piece.is_a?(Pawn)
-        piece.reachable_captures.any?(location)
+        bool_result = piece.reachable_captures.any?(location)
       else
-        piece.reachable_locations.any?(location)
+        bool_result = piece.reachable_locations.any?(location)
       end
+
+      if bool_result
+        piece_result = piece
+      end
+
+      piece_result != nil ? break : next
     }
+    if result_type == 'bool'
+      return bool_result
+    elsif result_type == 'piece'
+      return piece_result
+    end
   end
 
   def get_king_location(color)
