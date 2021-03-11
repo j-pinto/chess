@@ -1,9 +1,15 @@
 class Update
-  attr_reader :move, :board, :captured_piece
+  attr_reader :move, :board, :captured_piece, :check_data
   def initialize(move)
     @move = move
     @board = move.board
     @captured_piece = nil
+
+    @check_data = {
+      'in_check' => false,
+      'king' => nil,
+      'threat' => nil,
+    }
   end
 
   def execute
@@ -39,12 +45,12 @@ class Update
   def valid?
     color = @move.current_player.color
     king_location = @board.get_king_location(color)
-    king_under_threat = @board.location_under_threat?(king_location, color)
+    king_under_threat = @board.threat?(king_location, color)
 
     castle_path_under_threat = false
     if @move.is_a?(CastleMove)
       color = @move.current_player.color
-      castle_path_under_threat = @board.location_under_threat?(@move.rook_finish, color)
+      castle_path_under_threat = @board.threat?(@move.rook_finish, color)
     end
 
     if king_under_threat || castle_path_under_threat
@@ -67,9 +73,12 @@ class Update
     @move.current_player.color == 'white' ? enemy_color = 'black' : enemy_color = 'white'
 
     enemy_king_location = @board.get_king_location(enemy_color)
-    enemy_king_under_threat = @board.location_under_threat?(enemy_king_location, enemy_color)
-    if enemy_king_under_threat
+    threat = @board.threat?(enemy_king_location, enemy_color, result_type: 'piece')
+    if threat != nil
       @board.grid[enemy_king_location].in_check = true
+      @check_data['in_check'] = true
+      @check_data['king'] = @board.get_piece(enemy_king_location)
+      @check_data['threat'] = threat
     end
   end
 

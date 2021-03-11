@@ -1094,6 +1094,9 @@ describe Update do
 
         if piece.is_a?(King) && piece.color != move.current_player.color
           expect(piece.in_check).to eql(true)
+          expect(update.check_data['in_check']).to eql(true)
+          expect(update.check_data['king']).to eql(board.get_piece([4,0]))
+          expect(update.check_data['threat']).to eql(board.get_piece(finish))
         end
       }
     end
