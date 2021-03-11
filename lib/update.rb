@@ -110,7 +110,7 @@ class Update
 
     @board.grid.each_pair { |square, piece|
       next if piece == nil
-      next if piece == @move.current_player.color
+      next if piece.color == @move.current_player.color
       if piece.is_a?(Pawn)
         piece.en_pass_vulnerable = false
       end

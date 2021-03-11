@@ -935,8 +935,8 @@ describe Update do
       Graphics.print_board(board)
 
       mock_input = double('input')
-      start = [0,1]
-      finish = [0,2]
+      start = [1,0]
+      finish = [2,2]
       allow(mock_input).to receive(:start) {start}
       allow(mock_input).to receive(:finish) {finish}
 
@@ -972,6 +972,128 @@ describe Update do
           expect(piece.has_moved).to eql(true)
         else
           expect(piece.has_moved).to eql(false)
+        end
+      }
+    end
+
+    it 'results in correctly updated board given a valid standard move, including pawn en pass vulnerability' do
+      game = Game.new()
+      players = {
+        'white' => Player.new('white'),
+        'black' => Player.new('black')
+      }
+      board = Board.new()
+      game.board = board
+      game.players = players
+
+      puts ""
+      Graphics.print_board(board)
+
+      mock_input = double('input')
+      start = [0,1]
+      finish = [0,3]
+      allow(mock_input).to receive(:start) {start}
+      allow(mock_input).to receive(:finish) {finish}
+
+      turn = Turn.new(game)
+      turn.input = mock_input
+      
+      selector = MoveTypeSelector.new(turn)
+      selector.set_output()
+      selector_output = selector.output
+      case selector_output
+      when 'STANDARD'
+        move = StandardMove.new(turn)
+      when 'CAPTURE'
+        move = CaptureMove.new(turn)
+      when 'EN_PASS'
+        move = EnPassMove.new(turn)
+      when 'CASTLE'
+        move = CastleMove.new(turn)
+      else
+        puts "selector error"
+      end
+
+      update = Update.new(move)
+      update.execute()
+      update.valid?() ? update.finalize() : update.revert()
+      Graphics.print_board(board)
+
+      board.grid.each_pair { |square, piece|
+        next if piece == nil
+        expect(piece.location).to eql(square)
+
+        if piece.location == finish
+          expect(piece.has_moved).to eql(true)
+          expect(piece.en_pass_vulnerable).to eql(true)
+        else
+          expect(piece.has_moved).to eql(false)
+        end
+      }
+    end
+
+    it 'results in correctly updated board and correct king check status' do
+      game = Game.new()
+      game.turn_count = 1
+
+      players = {
+        'white' => Player.new('white'),
+        'black' => Player.new('black')
+      }
+
+      board = Board.new()
+      board.grid[[4,6]] = nil
+      board.grid[[4,1]] = nil
+      board.refresh_piece_data()
+
+      game.board = board
+      game.players = players
+
+      puts ""
+      Graphics.print_board(board)
+
+      mock_input = double('input')
+      start = [3,7]
+      finish = [4,6]
+      allow(mock_input).to receive(:start) {start}
+      allow(mock_input).to receive(:finish) {finish}
+
+      turn = Turn.new(game)
+      turn.input = mock_input
+      
+      selector = MoveTypeSelector.new(turn)
+      selector.set_output()
+      selector_output = selector.output
+      case selector_output
+      when 'STANDARD'
+        move = StandardMove.new(turn)
+      when 'CAPTURE'
+        move = CaptureMove.new(turn)
+      when 'EN_PASS'
+        move = EnPassMove.new(turn)
+      when 'CASTLE'
+        move = CastleMove.new(turn)
+      else
+        puts "selector error"
+      end
+
+      update = Update.new(move)
+      update.execute()
+      update.valid?() ? update.finalize() : update.revert()
+      Graphics.print_board(board)
+
+      board.grid.each_pair { |square, piece|
+        next if piece == nil
+        expect(piece.location).to eql(square)
+
+        if piece.location == finish
+          expect(piece.has_moved).to eql(true)
+        else
+          expect(piece.has_moved).to eql(false)
+        end
+
+        if piece.is_a?(King) && piece.color != move.current_player.color
+          expect(piece.in_check).to eql(true)
         end
       }
     end
