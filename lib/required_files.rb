@@ -7,6 +7,7 @@ require_relative 'input'
 require_relative 'player'
 require_relative 'turn'
 require_relative 'update'
+require_relative 'check_analysis'
 
 require_relative './moves/move_type_selector'
 require_relative './moves/move'
