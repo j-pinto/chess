@@ -5,7 +5,6 @@ class Board
     @pieces = make_pieces()
     @grid = make_grid()
     populate()
-    refresh_piece_data()
   end
 
   public
@@ -107,6 +106,8 @@ class Board
       location = piece.location
       @grid[location] = piece
     end
+
+    refresh_piece_data()
   end
 
   def make_grid
