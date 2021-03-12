@@ -1,22 +1,6 @@
 require './lib/required_files.rb'
 
- describe Input do
-  describe "#valid?" do
-    it "returns true if input string is correct format and in bounds" do
-      input = Input.new
-      expect(input.valid?('a1b2')).to eql(true)
-      expect(input.valid?('A1B2')).to eql(true)
-      expect(input.valid?('A1                    b2')).to eql(true)
-
-      expect(input.valid?('A1b9')).to eql(false)
-      expect(input.valid?('A1-b2')).to eql(false)
-      expect(input.valid?('1122')).to eql(false)
-      expect(input.valid?('foo')).to eql(false)
-    end
-  end
- end
- 
- describe Rook do
+describe Rook do
   describe '#update_reachable_locations' do
     it "Returns array of squares reachable by piece from current location. Array has all empty squares in the piece's movement path. Array includes squares occupied by enemy pieces, but no squares beyond it. Does not return squares out of bounds, does not return squares occupied by, or beyond, a friendly piece." do
       #create new board, then wipe all pieces
@@ -33,9 +17,9 @@ require './lib/required_files.rb'
       expect(rook.update_reachable_locations(board)).to eql(expected_reachable)
     end
   end
- end
+end
  
- describe Bishop do
+describe Bishop do
   describe '#update_reachable_locations' do
     it "Returns array of squares reachable by piece from current location. Array has all empty squares in the piece's movement path. Array includes squares occupied by enemy pieces, but no squares beyond it. Does not return squares out of bounds, does not return squares occupied by, or beyond, a friendly piece." do
       #create new board, then wipe all pieces
@@ -52,9 +36,9 @@ require './lib/required_files.rb'
       expect(bishop.update_reachable_locations(board)).to eql(expected_reachable)
     end
   end
- end
+end
  
- describe Queen do
+describe Queen do
   describe '#update_reachable_locations' do
     it "Returns array of squares reachable by piece from current location. Array has all empty squares in the piece's movement path. Array includes squares occupied by enemy pieces, but no squares beyond it. Does not return squares out of bounds, does not return squares occupied by, or beyond, a friendly piece." do
       #create new board, then wipe all pieces
@@ -74,9 +58,9 @@ require './lib/required_files.rb'
       expect(queen.update_reachable_locations(board)).to eql(expected_reachable)
     end
   end
- end
+end
  
- describe King do
+describe King do
   describe '#update_reachable_locations' do
     it "Returns array of squares reachable by piece from current location. For King, a max of one step in any direction is allowed. May reach enemy occupied squares. Cannot reach friendly occupied or out of bounds sqaures" do
       #create new board, then wipe all pieces
@@ -170,9 +154,9 @@ require './lib/required_files.rb'
       expect(black_king.castle_long_available?(board)).to eql(false)
     end
   end
- end
+end
  
- describe Knight do
+describe Knight do
   describe '#update_reachable_locations' do
     it "Returns array of squares reachable by piece from current location. For Knight, a max of one jump is allowed. May reach enemy occupied squares. Cannot reach friendly occupied or out of bounds sqaures" do
       #create new board, then wipe all pieces
@@ -190,9 +174,9 @@ require './lib/required_files.rb'
       expect(expected_array & actual_array).to eql(expected_array)
     end
   end
- end
+end
  
- describe Pawn do
+describe Pawn do
   describe '#update_reachable_locations' do
     it "returns two steps ahead of pawn if pawn has not been moved" do
       board = Board.new
@@ -245,9 +229,9 @@ require './lib/required_files.rb'
       expect(white_pawn.update_reachable_captures(board)).to eql( [ [0,5] ] )
     end
   end
- end
+end
  
- describe MoveTypeSelector do
+describe MoveTypeSelector do
   describe '#start_valid?' do
     it 'returns true if move given is a castle and castle is valid' do
       mock_board = Board.new
@@ -405,10 +389,9 @@ require './lib/required_files.rb'
       expect(move_type_selector.output).to eql('INVALID')
     end
   end
-
- end
+end
  
- describe StandardMove do
+describe StandardMove do
   it "assigns correct start, finish and selected piece given a valid standard move" do
   mock_board = Board.new
   player = Player.new('white')
@@ -432,9 +415,9 @@ require './lib/required_files.rb'
   expect(move.start).to eql(start)
   expect(move.finish).to eql(finish)
   end
- end
+end
  
- describe CaptureMove do
+describe CaptureMove do
   it "assigns correct start, finish, selected piece and captured piece given a valid capture" do
   player = Player.new('black')
   mock_board = Board.new
@@ -462,9 +445,9 @@ require './lib/required_files.rb'
   expect(move.start).to eql(start)
   expect(move.finish).to eql(finish)
   end
- end
+end
  
- describe EnPassMove do
+describe EnPassMove do
   it "assigns correct start, finish, selected pawn and captured pawn given a valid en pass" do
   player = Player.new('black')
   mock_board = Board.new
@@ -493,9 +476,9 @@ require './lib/required_files.rb'
   expect(move.selected_piece).to eql(piece)
   expect(move.captured_piece).to eql(target)
   end
- end
+end
  
- describe CastleMove do
+describe CastleMove do
   it "assigns correct start, finish, selected king and rook given a valid castle" do
   player = Player.new('black')
   mock_board = Board.new
@@ -522,7 +505,7 @@ require './lib/required_files.rb'
   expect(move.start).to eql(start)
   expect(move.finish).to eql(finish)
   end
- end
+end
 
 describe Move do
   it 'returns correct standard move data given correct input' do
