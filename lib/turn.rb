@@ -6,7 +6,7 @@ class Turn
     @current_player = nil
     @enemy_player = nil
     assign_players(game)
-    prompt()
+    puts "#{prompt()}"
     
     @input = nil
   end
@@ -22,6 +22,10 @@ class Turn
   end
 
   def prompt
-    puts "#{@current_player.color} to move"
+    if @current_player.color == 'white'
+      return "White To Move"
+    else
+      return "Black To Move"
+    end
   end
 end
