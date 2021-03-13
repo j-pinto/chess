@@ -1,3 +1,5 @@
+require './lib/required_files.rb'
+
 describe MoveTypeSelector do
   describe '#start_valid?' do
     it 'returns true when given valid starting square' do

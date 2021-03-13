@@ -1,3 +1,5 @@
+require './lib/required_files.rb'
+
 describe Move do
   it 'returns correct standard move data given correct input' do
     mock_board = Board.new()
