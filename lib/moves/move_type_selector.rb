@@ -12,6 +12,7 @@ class MoveTypeSelector
   def set_output
     unless start_valid?()
       @output = 'INVALID'
+      return
     end
 
     if is_castle?()
