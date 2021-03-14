@@ -65,6 +65,8 @@ class Update
     en_pass_status_update()
     move_status_update()
     capture_status_update()
+
+    @board.refresh_piece_data()
     enemy_king_check_scan()
   end
 
@@ -75,6 +77,7 @@ class Update
     enemy_king_location = @board.get_king_location(enemy_color)
     threat = @board.threat?(enemy_king_location, enemy_color, result_type: 'piece')
     if threat != nil
+      puts "check!"
       @board.grid[enemy_king_location].in_check = true
       @check_data['in_check'] = true
       @check_data['king'] = @board.get_piece(enemy_king_location)
