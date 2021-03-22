@@ -49,7 +49,7 @@ loop do
   update.execute()
   if update.valid?()
     update.finalize()
-    game.turn_count += 1
+    game.data_update(input, update)
   else
     update.revert()
     puts "move would result in check"
