@@ -1,9 +1,10 @@
 class Update
-  attr_reader :move, :board, :captured_piece, :check_data
+  attr_reader :move, :board, :captured_piece, :check_data, :promoted_pawn
   def initialize(move)
     @move = move
     @board = move.board
     @captured_piece = nil
+    @promoted_pawn = nil
 
     @check_data = {
       'in_check' => false,
@@ -66,6 +67,10 @@ class Update
     move_status_update()
     capture_status_update()
 
+    if promotion?()
+      promote()
+    end
+
     @board.refresh_piece_data()
     enemy_king_check_scan()
   end
@@ -121,4 +126,57 @@ class Update
       @captured_piece = @move.captured_piece
     end
   end
+
+  def promotion?
+    color = @move.current_player.color
+    color == 'white' ? rank = 7 : rank = 0
+    
+    return false unless @move.finish[1] == rank
+    return false unless @move.selected_piece.is_a?(Pawn)
+
+    @promoted_pawn = @move.selected_piece
+    return true
+  end
+
+  def promote
+    promotion_input = nil
+    loop do
+      promotion_input = promotion_prompt()
+      break if promotion_valid?(promotion_input)  
+    end
+    
+    promotion_assign(promotion_input)
+  end
+
+  def promotion_prompt
+    puts "Pawn Promotion!"
+    puts "Enter Promotion Selection (Q, R, B, N): "
+    return gets.chomp.upcase.gsub(/\s+/, "")
+  end
+
+  def promotion_valid?(input)
+    valid_inputs = ['Q', 'QUEEN', 'ROOK', 'R', 'BISHOP', 'B', 'KNIGHT', 'N']
+    if valid_inputs.any?(input)
+      return true
+    else
+      puts "input invalid, please try again"
+      return false
+    end 
+  end
+
+  def promotion_assign(input)
+    case input
+    when 'Q'
+      piece = Queen.new(@promoted_pawn.color, @move.finish)
+    when 'R'
+      piece = Rook.new(@promoted_pawn.color, @move.finish)
+    when 'B'
+      piece = Bishop.new(@promoted_pawn.color, @move.finish)
+    when 'N'
+      piece = Knight.new(@promoted_pawn.color, @move.finish)
+    end
+    puts "promoting Pawn to #{piece.class}"
+    @board.grid[@move.finish] = piece
+  end
+
 end

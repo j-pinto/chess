@@ -1,5 +1,5 @@
 class Input
-  attr_reader :start, :finish, :input_string
+  attr_accessor :start, :finish, :input_string
   def initialize
     @input_string = nil
     @start = nil
