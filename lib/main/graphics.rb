@@ -9,6 +9,8 @@ module Graphics
     move_count = 0
     move_label = 0
 
+    print `clear`
+    
     4.times {
       #print 1st row alternating light-dark squares (ex: A8-H8)
       Graphics.blank_strip_light_dark()

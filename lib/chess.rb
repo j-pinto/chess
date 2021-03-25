@@ -10,7 +10,9 @@ players = {
 game.board = board
 game.players = players
 
-Graphics.print_board(game)
+graphics = GraphicsObj.new(game)
+graphics.print_board()
+
 loop do
   puts "count: #{game.turn_count}"
   turn = Turn.new(game)
@@ -57,7 +59,7 @@ loop do
   end
 
   puts ""
-  Graphics.print_board(game)
+  graphics.print_board()
 
   if update.check_data['in_check'] == true
     analysis = CheckAnalysis.new(update)
