@@ -14,7 +14,6 @@ graphics = GraphicsObj.new(game)
 graphics.print_board()
 
 loop do
-  puts "count: #{game.turn_count}"
   turn = Turn.new(game)
   input = Input.new()
   input.get()
@@ -26,7 +25,6 @@ loop do
   turn.input = input
   selector = MoveTypeSelector.new(turn)
   selector.set_output()
-  puts "#{selector.output}"
 
   move = nil
   case selector.output
