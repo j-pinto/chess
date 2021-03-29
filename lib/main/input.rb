@@ -55,7 +55,7 @@ class Input
   end
 
   def prompt
-    puts "Enter Move:"
+    puts "Enter Input:"
   end
 
   def error_msg

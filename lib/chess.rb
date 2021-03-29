@@ -19,8 +19,11 @@ loop do
   input.get()
 
   if input.data_request == true
+    graphics.clear()
     graphics.print_captures()
     graphics.print_moves()
+    graphics.newline()
+    graphics.print_board()
     next
   end
 
@@ -62,7 +65,7 @@ loop do
     next
   end
 
-  puts ""
+  graphics.clear()
   graphics.print_board()
 
   if update.check_data['in_check'] == true

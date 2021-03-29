@@ -239,6 +239,10 @@ class GraphicsObj
     @move_count = 0
     @move_label = 0
   end
+
+  def clear
+    print `clear`
+  end
 end
 
 
