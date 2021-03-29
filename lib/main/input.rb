@@ -1,21 +1,34 @@
 class Input
   attr_accessor :start, :finish, :input_string
+  attr_reader :data_request
   def initialize
     @input_string = nil
     @start = nil
     @finish = nil
+    @data_request = false
   end
   
   def get()
     loop do
       prompt()
       @input_string = gets
+      return if data_request?()
       valid?() ? break : error_msg()
     end
 
     converted_input = convert()
     @start = converted_input[0]
     @finish = converted_input[1]
+  end
+
+  def data_request?
+    @input_string = @input_string.chomp.upcase.gsub(/\s+/, "")
+    if @input_string == 'DATA'
+      @data_request = true
+      return true
+    else
+      return false
+    end
   end
 
   def valid?()

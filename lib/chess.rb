@@ -18,6 +18,12 @@ loop do
   input = Input.new()
   input.get()
 
+  if input.data_request == true
+    graphics.print_captures()
+    graphics.print_moves()
+    next
+  end
+
   loop do
     break if ( input.start != nil && input.finish != nil )
   end
@@ -58,8 +64,6 @@ loop do
 
   puts ""
   graphics.print_board()
-  graphics.print_captures()
-  graphics.print_moves()
 
   if update.check_data['in_check'] == true
     analysis = CheckAnalysis.new(update)
