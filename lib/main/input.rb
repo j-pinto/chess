@@ -11,7 +11,7 @@ class Input
   def get()
     loop do
       prompt()
-      @input_string = gets
+      @input_string = gets.chomp.upcase.gsub(/\s+/, "")
       return if data_request?()
       valid?() ? break : error_msg()
     end
@@ -22,7 +22,6 @@ class Input
   end
 
   def data_request?
-    @input_string = @input_string.chomp.upcase.gsub(/\s+/, "")
     if @input_string == 'DATA'
       @data_request = true
       return true
@@ -32,7 +31,6 @@ class Input
   end
 
   def valid?()
-    @input_string = @input_string.chomp.upcase.gsub(/\s+/, "")
     return false unless @input_string.length == 4
 
     return false unless @input_string[0].match?(/\A[A-H]*\z/)
