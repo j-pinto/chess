@@ -1,4 +1,4 @@
-class GraphicsObj
+class Graphics
   def initialize(game)
     @board = game.board
     @move_list = game.move_list

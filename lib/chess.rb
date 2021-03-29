@@ -10,7 +10,7 @@ players = {
 game.board = board
 game.players = players
 
-graphics = GraphicsObj.new(game)
+graphics = Graphics.new(game)
 graphics.print_board()
 
 loop do
