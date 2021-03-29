@@ -19,6 +19,29 @@ class GraphicsObj
     newline()
     reset_counts()
   end
+
+  def print_captures
+    return if @captured_pieces.empty?
+    puts "Captured Pieces: "
+    types = [Queen, Rook, Bishop, Knight, Pawn]
+    colors = ['white', 'black']
+
+    colors.each { |color|
+      types.each {|type|
+        captured_piece_print(color, type)
+      }
+
+      newline()
+    }
+  end
+
+  def captured_piece_print(color, type)
+    @captured_pieces.each { |piece|
+      next unless piece.class == type
+      next unless piece.color == color
+      print "#{piece.unicode}" 
+    }
+  end
   
   def print_board
     top_row()
