@@ -59,16 +59,13 @@ class GraphicsObj
 
   def top_row
     blank_strip_light_dark()
-    #captured_row()
     newline()
 
     rank_print()
     piece_strip_light_dark()
-    #moveset_title()
     newline()
 
     blank_strip_light_dark()
-    #move_line()
     newline()
 
     @rank_count -= 1
@@ -77,16 +74,13 @@ class GraphicsObj
 
   def odd_row
     blank_strip_dark_light()
-    #move_line()
     newline()
 
     rank_print()
     piece_strip_dark_light()
-    #move_line()
     newline()
 
     blank_strip_dark_light()
-    #move_line()
     newline()
 
     @rank_count -= 1
@@ -95,16 +89,13 @@ class GraphicsObj
 
   def even_row
     blank_strip_light_dark()
-    #move_line()
     newline()
 
     rank_print()
     piece_strip_light_dark()
-    #move_line()
     newline()
 
     blank_strip_light_dark()
-    #move_line()
     newline()
 
     @rank_count -= 1
