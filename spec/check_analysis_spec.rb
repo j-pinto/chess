@@ -10,8 +10,8 @@ describe CheckAnalysis do
     king = mock_board.get_piece([4,0])
     threat = mock_board.get_piece([7,3])
 
-    puts ""
-    Graphics.print_board(mock_board)
+    #puts ""
+    #Graphics.print_board(mock_board)
 
     mock_check_data = {
       'king' => king,
@@ -36,8 +36,8 @@ describe CheckAnalysis do
     king = mock_board.get_piece([4,0])
     threat = mock_board.get_piece([4,6])
 
-    puts ""
-    Graphics.print_board(mock_board)
+    #puts ""
+    #Graphics.print_board(mock_board)
 
     mock_check_data = {
       'king' => king,
@@ -65,8 +65,8 @@ describe CheckAnalysis do
     king = mock_board.get_piece([4,0])
     threat = mock_board.get_piece([4,6])
 
-    puts ""
-    Graphics.print_board(mock_board)
+    #puts ""
+    #Graphics.print_board(mock_board)
 
     mock_check_data = {
       'king' => king,
@@ -90,8 +90,8 @@ describe CheckAnalysis do
     king = mock_board.get_piece([4,0])
     threat = mock_board.get_piece([6,2])
 
-    puts ""
-    Graphics.print_board(mock_board)
+    #puts ""
+    #Graphics.print_board(mock_board)
 
     mock_check_data = {
       'king' => king,

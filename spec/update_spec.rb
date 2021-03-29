@@ -260,8 +260,8 @@ describe Update do
       game.board = board
       game.players = players
 
-      puts ""
-      Graphics.print_board(board)
+      #puts ""
+      #Graphics.print_board(board)
 
       mock_input = double('input')
       start = [1,0]
@@ -291,7 +291,7 @@ describe Update do
       update = Update.new(move)
       update.execute()
       update.valid?() ? update.finalize() : update.revert()
-      Graphics.print_board(board)
+      #Graphics.print_board(board)
 
       board.grid.each_pair { |square, piece|
         next if piece == nil
@@ -315,8 +315,8 @@ describe Update do
       game.board = board
       game.players = players
 
-      puts ""
-      Graphics.print_board(board)
+      #puts ""
+      #Graphics.print_board(board)
 
       mock_input = double('input')
       start = [0,1]
@@ -346,7 +346,7 @@ describe Update do
       update = Update.new(move)
       update.execute()
       update.valid?() ? update.finalize() : update.revert()
-      Graphics.print_board(board)
+      #Graphics.print_board(board)
 
       board.grid.each_pair { |square, piece|
         next if piece == nil
@@ -378,8 +378,8 @@ describe Update do
       game.board = board
       game.players = players
 
-      puts ""
-      Graphics.print_board(board)
+      #puts ""
+      #Graphics.print_board(board)
 
       mock_input = double('input')
       start = [3,7]
@@ -409,7 +409,7 @@ describe Update do
       update = Update.new(move)
       update.execute()
       update.valid?() ? update.finalize() : update.revert()
-      Graphics.print_board(board)
+      #Graphics.print_board(board)
 
       board.grid.each_pair { |square, piece|
         next if piece == nil
