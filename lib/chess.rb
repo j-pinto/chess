@@ -58,6 +58,7 @@ loop do
 
   puts ""
   graphics.print_board()
+  graphics.print_moves()
 
   if update.check_data['in_check'] == true
     analysis = CheckAnalysis.new(update)

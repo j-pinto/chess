@@ -12,6 +12,14 @@ class GraphicsObj
     @move_label = 0
   end
 
+  def print_moves
+    moveset_title()
+    newline()
+    move_lines()
+    newline()
+    reset_counts()
+  end
+  
   def print_board
     top_row()
 
@@ -28,16 +36,16 @@ class GraphicsObj
 
   def top_row
     blank_strip_light_dark()
-    captured_row()
+    #captured_row()
     newline()
 
     rank_print()
     piece_strip_light_dark()
-    moveset_title()
+    #moveset_title()
     newline()
 
     blank_strip_light_dark()
-    move_line()
+    #move_line()
     newline()
 
     @rank_count -= 1
@@ -46,16 +54,16 @@ class GraphicsObj
 
   def odd_row
     blank_strip_dark_light()
-    move_line()
+    #move_line()
     newline()
 
     rank_print()
     piece_strip_dark_light()
-    move_line()
+    #move_line()
     newline()
 
     blank_strip_dark_light()
-    move_line()
+    #move_line()
     newline()
 
     @rank_count -= 1
@@ -64,16 +72,16 @@ class GraphicsObj
 
   def even_row
     blank_strip_light_dark()
-    move_line()
+    #move_line()
     newline()
 
     rank_print()
     piece_strip_light_dark()
-    move_line()
+    #move_line()
     newline()
 
     blank_strip_light_dark()
-    move_line()
+    #move_line()
     newline()
 
     @rank_count -= 1
@@ -160,34 +168,41 @@ class GraphicsObj
     puts ""
   end
   
-  def move_line
-    return if @move_list.empty?
-  
-    3.times {
-      return if @move_list[@move_count] == nil
-  
-      print "#{@move_label + 1}."
-      if @move_label < 9
-        print "  "
-      else
-        print " "
-      end
-      print "#{@move_list[@move_count]}"
-  
-      if @move_list[@move_count + 1] != nil
-        print "  #{@move_list[@move_count + 1]}"
-      else
-        print "      "
-      end
-  
-      print " |"
-  
-      @move_count += 48
-      @move_label += 24
-    }
-  
-    @move_count += 2
-    @move_label += 1
+  def move_lines
+    until ( @move_count > @move_list.size )
+      4.times {
+        return if @move_list[@move_count] == nil
+        label_print()
+        white_move_print()
+        black_move_print()
+        @move_count += 2
+        @move_label += 1
+      }
+      newline()
+    end
+  end
+
+  def label_print
+    print "#{ @move_label + 1 }."
+
+    if @move_label < 9
+      print "  "
+    else
+      print " "
+    end
+  end
+
+  def white_move_print
+    print "#{ @move_list[@move_count] }"
+  end
+
+  def black_move_print
+    if @move_list[@move_count + 1] != nil
+      print "  #{@move_list[@move_count + 1]}"
+    else
+      print "      "
+    end
+    print " |"
   end
 
   def captured_row
