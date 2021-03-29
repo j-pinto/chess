@@ -10,10 +10,10 @@ class Input
   
   def get()
     loop do
-      prompt()
+      Prompts.input()
       @input_string = gets.chomp.upcase.gsub(/\s+/, "")
       return if data_request?()
-      valid?() ? break : error_msg()
+      valid?() ? break : Prompts.invalid_input()
     end
 
     converted_input = convert()
@@ -52,13 +52,4 @@ class Input
     return [ [start_file, start_rank,] ,  [finish_file, finish_rank] ]
   end
 
-  def prompt
-    puts "Enter Input:"
-  end
-
-  def error_msg
-    puts "invalid input, please try again"
-  end
-
-#
 end
