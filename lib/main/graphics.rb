@@ -29,15 +29,16 @@ class Graphics
 
   def print_moves
     moveset_title()
-    newline()
     move_lines()
     newline()
     reset_counts()
   end
 
   def print_captures
-    return if @captured_pieces.empty?
     puts "Captured Pieces: "
+    if @captured_pieces.empty?
+      puts "NONE"
+    end
     types = [Queen, Rook, Bishop, Knight, Pawn]
     colors = ['white', 'black']
 
@@ -244,8 +245,10 @@ class Graphics
   end
 
   def moveset_title
-    return if @move_list.empty?
-    print "Past Move List:"
+    puts "Past Move List:"
+    if @move_list.empty?
+      puts "NONE"
+    end
   end
 
   def reset_counts
