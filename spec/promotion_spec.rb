@@ -23,7 +23,8 @@ describe Update do
 
     update = Update.new(move)
 
-    update.stub(:promotion_prompt).and_return('Q')
+    promotion_input = 'Q'
+    allow(update).to receive(:get_promotion).and_return(promotion_input)
 
     update.execute()
     if update.valid?()
@@ -57,7 +58,8 @@ describe Update do
 
     update = Update.new(move)
 
-    update.stub(:promotion_prompt).and_return('B')
+    promotion_input = 'B'
+    allow(update).to receive(:get_promotion).and_return(promotion_input)
 
     update.execute()
     if update.valid?()
