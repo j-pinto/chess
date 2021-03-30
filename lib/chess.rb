@@ -31,17 +31,10 @@ loop do
   input.get()
 
   if input.data_request == true
-    graphics.clear()
-    graphics.print_captures()
-    graphics.print_moves()
-    graphics.newline()
-    graphics.print_board()
+    graphics.print_data()
     next
   elsif input.help_request == true
-    graphics.clear()
-    Prompts.instructions()
-    graphics.newline()
-    graphics.print_board()
+    graphics.print_help()
     next
   end
 

@@ -12,6 +12,21 @@ class Graphics
     @move_label = 0
   end
 
+  def print_data
+    clear()
+    print_captures()
+    print_moves()
+    newline()
+    print_board()
+  end
+
+  def print_help
+    clear()
+    Prompts.instructions()
+    newline()
+    print_board()
+  end
+
   def print_moves
     moveset_title()
     newline()
