@@ -10,28 +10,21 @@ class CheckAnalysis
 
   def get_result
     if threat_capturable?()
-      puts ""
-      puts "threat can be captured"
       return false
     end
+
     unless @check_path.empty?
       @check_path.each { | path_square | 
         if square_blockable?(path_square)
-          puts ""
-          puts "check can be blocked"
           return false
         end
       }
     end
 
     if king_moveable?()
-      puts ""
-      puts "king can escape"
       return false
     end
 
-    puts ""
-    puts "checkmate!"
     return true
   end
 

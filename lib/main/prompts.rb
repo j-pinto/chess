@@ -43,14 +43,40 @@ module Prompts
   end
 
   def Prompts.turn(color)
-    if color == 'white'
-      puts "White To Move"
-    else
-      puts "Black To Move"
-    end
+    puts "#{color.capitalize} To Move"
+  end
+
+  def Prompts.check
+    puts ""
+    puts "Check!"
+  end
+
+  def Prompts.promotion
+    puts "Pawn Promotion!"
+    puts "Enter Promotion Selection (Q, R, B, N): "
+  end
+
+  def Prompts.promotion_complete(piece)
+    puts "Pawn promoted to #{piece.class}"
   end
 
   def Prompts.invalid_input
     puts "Input INVALID, please try again."
+  end
+
+  def Prompts.invalid_move
+    puts "Move INVALID, please try again."
+  end
+
+  def Prompts.invalid_move_check
+    puts "Move INVALID, would result in check. Please try again."
+  end
+
+  def Prompts.checkmate
+    puts "Checkmate!"
+  end
+
+  def Prompts.winner(color)
+    puts "#{color.capitalize} is the winner!"
   end
 end

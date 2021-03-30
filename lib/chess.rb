@@ -49,7 +49,7 @@ loop do
   move = nil
   case selector.output
   when 'STANDARD'
-    move = StandardMove.new(turn)                                                        
+    move = StandardMove.new(turn)                                                      
   when 'CAPTURE'
     move = CaptureMove.new(turn)
   when 'EN_PASS'
@@ -57,7 +57,6 @@ loop do
   when 'CASTLE'
     move = CastleMove.new(turn)
   when 'INVALID'
-    puts "move is invalid"
     next
   end
 
@@ -70,18 +69,19 @@ loop do
   if update.valid?()
     update.finalize()
     game.data_update(input, update)
+    graphics.clear()
+    graphics.print_board()
   else
     update.revert()
-    puts "move would result in check"
     next
   end
 
-  graphics.clear()
-  graphics.print_board()
-
   if update.check_data['in_check'] == true
+    Prompts.check()
     analysis = CheckAnalysis.new(update)
     if analysis.checkmate == true
+      Prompts.checkmate()
+      Prompts.winner(turn.current_player.color)
       exit
     end
   end

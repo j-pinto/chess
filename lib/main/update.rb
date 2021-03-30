@@ -55,6 +55,7 @@ class Update
     end
 
     if king_under_threat || castle_path_under_threat
+      Prompts.invalid_move_check()
       return false
     else
       return true
@@ -82,7 +83,6 @@ class Update
     enemy_king_location = @board.get_king_location(enemy_color)
     threat = @board.threat?(enemy_king_location, enemy_color, result_type: 'piece')
     if threat != nil
-      puts "check!"
       @board.grid[enemy_king_location].in_check = true
       @check_data['in_check'] = true
       @check_data['king'] = @board.get_piece(enemy_king_location)
@@ -140,17 +140,16 @@ class Update
 
   def promote
     promotion_input = nil
+    Prompts.promotion()
     loop do
-      promotion_input = promotion_prompt()
+      promotion_input = get_promotion()
       break if promotion_valid?(promotion_input)  
     end
     
     promotion_assign(promotion_input)
   end
 
-  def promotion_prompt
-    puts "Pawn Promotion!"
-    puts "Enter Promotion Selection (Q, R, B, N): "
+  def get_promotion
     return gets.chomp.upcase.gsub(/\s+/, "")
   end
 
@@ -159,7 +158,7 @@ class Update
     if valid_inputs.any?(input)
       return true
     else
-      puts "input invalid, please try again"
+      Prompts.invalid_input()
       return false
     end 
   end
@@ -175,7 +174,7 @@ class Update
     when 'N'
       piece = Knight.new(@promoted_pawn.color, @move.finish)
     end
-    puts "promoting Pawn to #{piece.class}"
+    Prompts.promotion_complete(piece)
     @board.grid[@move.finish] = piece
   end
 

@@ -25,6 +25,7 @@ class MoveTypeSelector
       @output = 'STANDARD'
     else
       @output = 'INVALID'
+      Prompts.invalid_move()
     end
   end
 
