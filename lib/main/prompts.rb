@@ -3,17 +3,16 @@ module Prompts
     puts "
     Welcome to Chess!"
     puts "
-    Game is designed for two players. Each player enters their 
-    move when prompted in long algebraic format.
     (tip: for proper display of interface, set terminal to show
-    at least 65 characters per line)"
+    at least 75 characters per line)"
   end
 
   def Prompts.instructions
     puts "
-    For any move, only enter the starting and ending square. 
-    Do not include any notation for the piece being moved, 
-    captures, or en passant.
+    Game is designed for two players. Each player enters their 
+    move when prompted in long algebraic format. Only enter the
+    starting and ending square. Do not include any notation for
+    the piece being moved, captures, or en passant.
 
       example: c1f4 (to move a piece from C1 to F4)
 
@@ -28,10 +27,13 @@ module Prompts
     input prompt during play:
       'DATA' - to see a list of captured pieces and past moves
       'SAVE' - to save the state of the current game
-      'EXIT' - to exit the program
+      'EXIT' - to exit the program"
 
-    To start a new game, enter 'NEW'. To exit, enter 'EXIT'."
+    puts ""
+  end
 
+  def Prompts.new_game
+    puts "To start a new game, enter 'NEW'. To exit, enter 'EXIT'."
     puts ""
   end
 

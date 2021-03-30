@@ -4,6 +4,7 @@ class Intro
     @input = nil
     Prompts.intro()
     Prompts.instructions()
+    Prompts.new_game()
   end
 
   def get_input
