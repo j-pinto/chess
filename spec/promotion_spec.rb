@@ -1,6 +1,26 @@
 require './lib/required_files.rb'
 
 describe Update do
+####################
+# disable all terminal outputs
+before(:all) do
+  @original_stdout = $stdout
+  @original_stderr = $stderr
+  $stdout = File.open(File::NULL, 'w')
+  $stderr = File.open(File::NULL, 'w')
+end
+####################
+
+####################
+# re-enable all terminal outputs
+after(:all) do
+  $stdout = @original_stdout
+  $stderr = @original_stderr
+  @original_stdout = nil
+  @original_stderr = nil
+end
+####################
+
   it 'promotes pawn that reaches end of board to queen' do
     board = Board.new()
     board.grid[[0,7]] = nil

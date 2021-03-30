@@ -1,6 +1,26 @@
 require './lib/required_files.rb'
 
 describe Turn do
+####################
+# disable all terminal outputs
+before(:all) do
+  @original_stdout = $stdout
+  @original_stderr = $stderr
+  $stdout = File.open(File::NULL, 'w')
+  $stderr = File.open(File::NULL, 'w')
+end
+####################
+
+####################
+# re-enable all terminal outputs
+after(:all) do
+  $stdout = @original_stdout
+  $stderr = @original_stderr
+  @original_stdout = nil
+  @original_stderr = nil
+end
+####################
+
   it 'appropriately switches current player as turn count increments' do
     game = Game.new()
     board = Board.new()
@@ -12,9 +32,7 @@ describe Turn do
     game.board = board
     game.players = players
 
-    puts ""
     until game.turn_count == 10
-      puts "count: #{game.turn_count}"
       turn = Turn.new(game)
       if game.turn_count.even?
         expect(turn.prompt()).to eql("White To Move")
@@ -35,8 +53,7 @@ describe Turn do
 
     game.board = board
     game.players = players
-
-    puts ""
+ 
     mock_starts = [
       [0,1],[0,6],[1,0],[1,7]
     ]
@@ -45,7 +62,6 @@ describe Turn do
     ]
 
     loop do
-      puts "count: #{game.turn_count}"
       turn = Turn.new(game)
       if game.turn_count.even?
         expect(turn.prompt()).to eql("White To Move")
@@ -60,9 +76,7 @@ describe Turn do
       allow(input).to receive(:finish) {finish}
 
       allow(turn).to receive(:input) {input}
-      puts "#{turn.input.start}"
-      puts "#{turn.input.finish}"
-
+      
       selector = MoveTypeSelector.new(turn)
       selector.set_output()
       expect(selector.output).to eql('STANDARD')
@@ -83,7 +97,6 @@ describe Turn do
     game.board = board
     game.players = players
 
-    puts ""
     mock_starts = [
       [0,1],[0,6],[1,0],[0,0]
     ]
@@ -92,7 +105,6 @@ describe Turn do
     ]
 
     loop do
-      puts "count: #{game.turn_count}"
       turn = Turn.new(game)
       if game.turn_count.even?
         expect(turn.prompt()).to eql("White To Move")
@@ -107,9 +119,7 @@ describe Turn do
       allow(input).to receive(:finish) {finish}
 
       allow(turn).to receive(:input) {input}
-      puts "#{turn.input.start}"
-      puts "#{turn.input.finish}"
-
+      
       selector = MoveTypeSelector.new(turn)
       selector.set_output()
 
@@ -135,7 +145,6 @@ describe Turn do
     game.board = board
     game.players = players
 
-    puts ""
     mock_starts = [
       [0,1],[0,6],[1,0],[0,4]
     ]
@@ -144,7 +153,6 @@ describe Turn do
     ]
 
     loop do
-      puts "count: #{game.turn_count}"
       turn = Turn.new(game)
       if game.turn_count.even?
         expect(turn.prompt()).to eql("White To Move")
@@ -159,9 +167,7 @@ describe Turn do
       allow(input).to receive(:finish) {finish}
 
       allow(turn).to receive(:input) {input}
-      puts "#{turn.input.start}"
-      puts "#{turn.input.finish}"
-
+      
       selector = MoveTypeSelector.new(turn)
       selector.set_output()
 
@@ -186,8 +192,7 @@ describe Turn do
 
     game.board = board
     game.players = players
-
-    puts ""
+    
     mock_starts = [
       [0,1],[0,6],[1,0],[1,7]
     ]
@@ -196,7 +201,6 @@ describe Turn do
     ]
 
     loop do
-      puts "count: #{game.turn_count}"
       turn = Turn.new(game)
       if game.turn_count.even?
         expect(turn.prompt()).to eql("White To Move")
@@ -211,9 +215,7 @@ describe Turn do
       allow(input).to receive(:finish) {finish}
 
       allow(turn).to receive(:input) {input}
-      puts "#{turn.input.start}"
-      puts "#{turn.input.finish}"
-
+      
       selector = MoveTypeSelector.new(turn)
       selector.set_output()
 
@@ -238,8 +240,7 @@ describe Turn do
 
     game.board = board
     game.players = players
-
-    puts ""
+    
     mock_starts = [
       [0,1],[3,0],[0,1],[0,6]
     ]
@@ -264,9 +265,7 @@ describe Turn do
       allow(input).to receive(:finish) {finish}
 
       allow(turn).to receive(:input) {input}
-      puts "#{turn.input.start}"
-      puts "#{turn.input.finish}"
-
+      
       selector = MoveTypeSelector.new(turn)
       selector.set_output()
 
