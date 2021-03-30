@@ -42,6 +42,14 @@ module Prompts
     puts "Enter Input: "
   end
 
+  def Prompts.turn(color)
+    if color == 'white'
+      puts "White To Move"
+    else
+      puts "Black To Move"
+    end
+  end
+
   def Prompts.invalid_input
     puts "Input INVALID, please try again."
   end

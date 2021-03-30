@@ -6,7 +6,7 @@ class Turn
     @current_player = nil
     @enemy_player = nil
     assign_players(game)
-    puts "#{prompt()}"
+    Prompts.turn(@current_player.color)
     
     @input = nil
   end
