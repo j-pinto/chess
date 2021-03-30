@@ -37,6 +37,12 @@ loop do
     graphics.newline()
     graphics.print_board()
     next
+  elsif input.help_request == true
+    graphics.clear()
+    Prompts.instructions()
+    graphics.newline()
+    graphics.print_board()
+    next
   end
 
   loop do

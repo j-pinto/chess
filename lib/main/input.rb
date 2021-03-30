@@ -1,11 +1,12 @@
 class Input
   attr_accessor :start, :finish, :input_string
-  attr_reader :data_request
+  attr_reader :data_request, :help_request
   def initialize
     @input_string = nil
     @start = nil
     @finish = nil
     @data_request = false
+    @help_request = false
   end
   
   def get()
@@ -13,12 +14,22 @@ class Input
       Prompts.input()
       @input_string = gets.chomp.upcase.gsub(/\s+/, "")
       return if data_request?()
+      return if help_request?()
       valid?() ? break : Prompts.invalid_input()
     end
 
     converted_input = convert()
     @start = converted_input[0]
     @finish = converted_input[1]
+  end
+
+  def help_request?
+    if @input_string == 'HELP'
+      @help_request = true
+      return true
+    else
+      return false
+    end
   end
 
   def data_request?

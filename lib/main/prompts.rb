@@ -27,7 +27,8 @@ module Prompts
     input prompt during play:
       'DATA' - to see a list of captured pieces and past moves
       'SAVE' - to save the state of the current game
-      'EXIT' - to exit the program"
+      'EXIT' - to exit the program
+      'HELP' - to display these instructions"
 
     puts ""
   end
