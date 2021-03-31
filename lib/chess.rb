@@ -9,6 +9,8 @@ end
 
 if intro.input == 'NEW'
   game = Game.new()
+elsif intro.input == 'LOAD'
+  game = SaveLoad.load()
 else
   exit
 end

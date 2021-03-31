@@ -34,7 +34,9 @@ module Prompts
   end
 
   def Prompts.new_game
-    puts "To start a new game, enter 'NEW'. To exit, enter 'EXIT'."
+    puts "
+    To start a new game, enter 'NEW'. To load a previous game,
+    enter 'LOAD'.To exit, enter 'EXIT'."
     puts ""
   end
 
@@ -86,5 +88,29 @@ module Prompts
 
   def Prompts.saved
     puts "Game saved successfully."
+  end
+
+  def Prompts.no_saved_games
+    puts "Error: No saved games available"
+    puts "Starting new game..."
+  end
+
+  def Prompts.display_saved_games
+    puts "
+    Enter number from list below corresponding to saved game you
+    wish to load. Enter 'NEW' to start a new game. Enter 'EXIT' 
+    to exit program"
+    puts "
+    List of saved games:"
+    save_files = Dir.children("#{Dir.pwd}/saved_games/")
+    save_files.each_index {|index| 
+      puts "    #{index + 1}. #{save_files[index].to_s.slice(0..-5)}"
+    }
+    puts ""
+  end
+
+  def Prompts.load_name_error
+    puts "
+    Error: file does not exist"
   end
 end

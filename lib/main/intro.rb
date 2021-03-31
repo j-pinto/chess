@@ -2,6 +2,7 @@ class Intro
   attr_reader :input
   def initialize
     @input = nil
+    @load_file_name = nil
     Prompts.intro()
     Prompts.instructions()
     Prompts.new_game()
@@ -16,7 +17,7 @@ class Intro
   end
 
   def valid_input?(string)
-    valid_inputs = ['NEW', 'EXIT']
+    valid_inputs = ['NEW', 'LOAD', 'EXIT']
     if valid_inputs.any?(string)
       @input = string
       return true
