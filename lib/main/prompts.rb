@@ -5,11 +5,11 @@ module Prompts
     puts "
     (tip: for proper display of interface, set terminal to show
     at least 75 characters per line)"
+    puts ""
   end
 
   def Prompts.instructions
-    puts "
-    Game is designed for two players. Each player enters their 
+    puts "    Game is designed for two players. Each player enters their 
     move when prompted in long algebraic format. Only enter the
     starting and ending square. Do not include any notation for
     the piece being moved, captures, or en passant.
