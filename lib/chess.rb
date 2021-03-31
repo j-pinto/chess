@@ -9,20 +9,11 @@ end
 
 if intro.input == 'NEW'
   game = Game.new()
-  board = Board.new()
-  players = {
-    'white' => Player.new('white'),
-    'black' => Player.new('black')
-  }
-
-  game.board = board
-  game.players = players
 else
   exit
 end
 
 graphics = Graphics.new(game)
-graphics.clear()
 graphics.print_board()
 
 loop do

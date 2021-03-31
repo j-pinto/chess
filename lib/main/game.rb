@@ -7,6 +7,15 @@ class Game
     @turn_count = 0
     @move_list = []
     @captured_pieces = []
+    start_new()
+  end
+
+  def start_new
+    @board = Board.new()
+    @players = {
+    'white' => Player.new('white'),
+    'black' => Player.new('black')
+    }
   end
 
   def data_update(input, update)
