@@ -10,6 +10,7 @@ require_relative './main/update'
 require_relative './main/check_analysis'
 require_relative './main/intro.rb'
 require_relative './main/prompts.rb'
+require_relative './main/save_load.rb'
 
 require_relative './moves/move_type_selector'
 require_relative './moves/move'

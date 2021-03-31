@@ -36,6 +36,10 @@ loop do
   elsif input.help_request == true
     graphics.print_help()
     next
+  elsif input.save_request == true
+    SaveLoad.save(game)
+    Prompts.saved()
+    next
   end
 
   loop do

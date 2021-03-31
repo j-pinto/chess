@@ -79,4 +79,12 @@ module Prompts
   def Prompts.winner(color)
     puts "#{color.capitalize} is the winner!"
   end
+
+  def Prompts.enter_save_name
+    puts "Enter name of file under which game will be saved: "
+  end
+
+  def Prompts.saved
+    puts "Game saved successfully."
+  end
 end
