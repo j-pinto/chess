@@ -20,10 +20,10 @@ module Prompts
     
       example: e8g8 (for a short castle by black king)
 
-    For pawn promotion, there will be separate prompt to select
+    For pawn promotion, there will be a separate prompt to select
     the new piece.
 
-    List of additional commands. These can be entered at any 
+    These additional commands can be entered at any 
     input prompt during play:
       'DATA' - to see a list of captured pieces and past moves
       'SAVE' - to save your game and exit
