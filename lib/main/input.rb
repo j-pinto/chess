@@ -14,6 +14,7 @@ class Input
     loop do
       Prompts.input()
       @input_string = gets.chomp.upcase.gsub(/\s+/, "")
+      exit_request?()
       return if data_request?()
       return if help_request?()
       return if save_request?()
@@ -23,6 +24,12 @@ class Input
     converted_input = convert()
     @start = converted_input[0]
     @finish = converted_input[1]
+  end
+
+  def exit_request?
+    if @input_string == 'EXIT'
+      exit
+    end
   end
 
   def save_request?
