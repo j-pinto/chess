@@ -1,3 +1,17 @@
+# Autoplay test takes a text file with lists of moves representing real games, and plays the games automatically
+
+# If given a valid list of moves, any failure to autoplay through a game in its entirety would indicate and issue with the programs move validation logic
+
+# To create a text file of games to test, first download a Portable Game Notation (PGN) file containing one or archived games from a number of freely-available online chess game databases
+
+# Text file can be created using the free pgn-extract program found here: https://www.cs.kent.ac.uk/people/staff/djb/pgn-extract/
+
+# pgn-extract should be configured to process your PGN file and output a .txt file with moves in UCI format, no tags, and no results (see pgn-extract instructions for details)
+
+# .txt file should be named autoplay_test_games.txt and stored in /spec/autoplay/
+
+# A sample file of 1,000 games has been supplied with this repository 
+
 require './lib/required_files.rb'
 require './spec/autoplay/autoplay_helper.rb'
 
