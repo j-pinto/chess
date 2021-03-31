@@ -26,8 +26,8 @@ module Prompts
     List of additional commands. These can be entered at any 
     input prompt during play:
       'DATA' - to see a list of captured pieces and past moves
-      'SAVE' - to save the state of the current game
-      'EXIT' - to exit the program
+      'SAVE' - to save your game and exit
+      'EXIT' - to exit without saving
       'HELP' - to display these instructions"
 
     puts ""

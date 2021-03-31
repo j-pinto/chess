@@ -34,7 +34,7 @@ loop do
   elsif input.save_request == true
     SaveLoad.save(game)
     Prompts.saved()
-    next
+    exit
   end
 
   loop do
