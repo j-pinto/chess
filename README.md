@@ -25,7 +25,7 @@
 * Unit tests were used throughout development to ensure newly added functions were working prior to making commits
 * Tests were written using Rspec, 50 separate test examples in total
 ### Autoplay testing
-* Autoplay testing was written in order to test a large number of games known to be comprised entirely of legal moves
-* If any archived game cannot be fully processed by the Autoplay test, it would indicate an issue with the program's move validation logic
+* Autoplay testing was written in order to test a large number of games downloaded from online chess game archives. 
+* It can be safely assumed that each archived game is comprised entirely of legal moves. Therefore, if any archived game cannot be fully processed by the Autoplay test, it would indicate an issue with the program's move validation and/or game state update logic
 * Test was run with a sample file containing 1,000 games, all of which were processed successfully
 * More info can be found in comments of the autoplay_spec.rb file
