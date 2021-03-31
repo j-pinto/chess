@@ -21,7 +21,7 @@
 
 ## Development
 * App was implemented entirely in Ruby
-* Every effort was made to ensure methods were cleanly separated in to appropriate classes, and each major step in a method was further abstracted to its own method 
+* Following principles of Object Oriented Programming, methods were cleanly separated in to relevant classes/modules, with major blocks within methods further abstracted to their own methods. Methods were re-used and composed together as much as possible to avoid redundant code.
 * Unit tests were used throughout development to ensure newly added functions were working prior to making commits
 * Tests were written using Rspec, 50 separate test examples in total
 ### Autoplay testing
