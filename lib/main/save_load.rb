@@ -18,7 +18,9 @@ module SaveLoad
   def SaveLoad.load
     game = nil
     unless SaveLoad.save_files_exist?()
+      Prompts.clear()
       Prompts.no_saved_games()
+      Prompts.new_game_success()
       game = Game.new()
       return game
     end
@@ -56,6 +58,8 @@ module SaveLoad
   def SaveLoad.other_request(input)
     request = input.clone.chomp.upcase.gsub(/\s+/, "")
     if request == 'NEW'
+      Prompts.clear()
+      Prompts.new_game_success()
       game = Game.new()
       return game
     elsif request == 'EXIT'
@@ -76,6 +80,8 @@ module SaveLoad
     file_path = "#{Dir.pwd}/saved_games/#{save_files[index]}"
     serialized_game = File.read(file_path)
     deserialized_game = YAML.load(serialized_game)
+    Prompts.clear()
+    Prompts.load_game_success("#{save_files[index].to_s.slice(0..-5)}")
     return deserialized_game
   end
 

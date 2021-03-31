@@ -113,4 +113,18 @@ module Prompts
     puts "
     Error: file does not exist"
   end
+
+  def Prompts.new_game_success
+    puts "New game started."
+    puts ""
+  end
+
+  def Prompts.load_game_success(string)
+    puts "#{string} loaded successfully."
+    puts ""
+  end
+
+  def Prompts.clear
+    print `clear`
+  end
 end

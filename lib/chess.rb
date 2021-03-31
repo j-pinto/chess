@@ -7,8 +7,10 @@ loop do
   break if intro.input != nil
 end
 
-if intro.input == 'NEW'
+if intro.input == 'NEW' 
   game = Game.new()
+  Prompts.clear()
+  Prompts.new_game_success()
 elsif intro.input == 'LOAD'
   game = SaveLoad.load()
 else
